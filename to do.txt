@@ -1,0 +1,1 @@
+- do not insert into epics if they are closed. ie: https://github.com/sky-uk/ott-web-europe/issues/194

@@ -1,6 +1,5 @@
-
-# curl -X GET -H 'Accept: application/vnd.github.inertia-preview+json' -H 'Authorization: token d9cfcd75e27e7c0e7ea3de07fc1c7f0a83b9fd43' https://api.github.com/repos/sky-uk/ott-web-europe/issues/143
 import requests, json
+import db
 from flask import Flask
 
 app = Flask(__name__)
@@ -19,3 +18,11 @@ def fetch_issue(issue_number):
 
     data = r.json()
     return data
+
+def get_issue(issue_number):
+    all_issues = db.select_all_from_table("issues")
+    array_issues = {'issues':[]}
+    for issue in all_issues:
+        array_issues["issues"].append({"issueNumber": issue[0], "boardName": issue[1], "title": issue[2], "issueStatus": issue[3], "issueLink": issue[4]})
+
+    return array_issues

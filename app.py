@@ -9,9 +9,6 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello():
-    # for user in query_db('select * from users'):
-        # print(user['username'], 'has the id', user['user_id'])
-
     name = request.args.get("name", "World")
     return f'Hello, {escape(name)}!'
 
@@ -21,34 +18,32 @@ def api_epics():
 
 @app.route('/api/issue/<issue_number>')
 def api_issue(issue_number):
-    return issues.fetch_issue(issue_number)
-
-def query_db(query, args=(), one=False):
-    cur = db.get_db().execute(query, args)
-    rv = cur.fetchall()
-    cur.close()
-    return (rv[0] if rv else None) if one else rv
+    return issues.get_issue(issue_number)
 
 @app.route('/api/ingest/epics')
 def api_ingest_epics():
-    # Get all the epics
     all_epics = epics.fetch_epics()
 
     epic_issues = all_epics['epic_issues']
-    # print(issues)
     db.truncate_table('epics')
     for epic_issue in epic_issues:
         epic_issue_number = epic_issue['issue_number']
         epic_issue_details = issues.fetch_issue(epic_issue_number)
-        db.insert_epic(epic_issue_number, epic_issue_details['title'])
+        db.insert_epics(epic_issue_number, epic_issue_details['title'])
 
-    # i=0
-    # while(i<len(issues)):
-    #     print(">>>>> ")
-    #     print(issues[i])
-    #     i+=1
-    return "issues"
+    return "epics ingestion is complete"
 
+
+@app.route('/api/ingest/epicsIssues')
+def api_ingest_epics_issues():
+    all_epics = epics.get_epics()
+    db.truncate_table('epicsIssues')
+    for epic in all_epics["epics"]:
+        epic_issues = epics.fetch_epic_issues(epic["epicId"])
+        for issue in epic_issues["issues"]:
+            db.insert_epics_issues(epic["epicId"], issue["issue_number"])
+
+    return "epics issues ingestion complete"
 
 @app.route('/api/ingest/issues')
 def api_ingest_issues():

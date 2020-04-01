@@ -1,0 +1,87 @@
+
+
+CREATE TABLE "users" (
+	"userId"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	"email"	TEXT NOT NULL UNIQUE,
+	"name"	TEXT NOT NULL,
+	"password"	TEXT NOT NULL,
+	"accessMode"	TEXT
+)
+
+CREATE TABLE "projects" (
+	"projectId"	INTEGER NOT NULL,
+	"userId"	INTEGER NOT NULL,
+	"projectName"	TEXT NOT NULL,
+	"businesReqUrl"	TEXT,
+	"projectManager"	TEXT,
+	"architect"	TEXT,
+	"productOwner"	TEXT,
+	"trialDate"	TEXT,
+	"releaseDate"	TEXT
+)
+
+CREATE TABLE "tickets" (
+	"ticketId"	INTEGER NOT NULL,
+	"boardName"	TEXT,
+	"issueNumber"	INTEGER,
+	"dependantSystem"	TEXT,
+	"dependantReason"	BLOB,
+	"devEstimateInDays"	INTEGER,
+	"qaEstimateInDays"	INTEGER,
+	"proposedReleaseDropTo"	TEXT,
+	"totalComments"	INTEGER,
+	"notes"	BLOB,
+	"sharedPlatformIssue"	INTEGER
+)
+
+CREATE TABLE "reporting" (
+	"reportingId"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	"projectId"	INTEGER NOT NULL,
+	"contingencyId"	INTEGER NOT NULL
+);
+
+CREATE TABLE "contingency" (
+	"contingencyId"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	"title"	TEXT NOT NULL,
+	"percentage"	INTEGER NOT NULL DEFAULT 0,
+	"description"	TEXT
+);
+
+CREATE TABLE "access" (
+	"accessId"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	"userId"	INTEGER NOT NULL,
+	"proejctId"	INTEGER NOT NULL
+)
+
+CREATE TABLE "epics" (
+	"epicId"	INTEGER NOT NULL,
+	"epicName"	TEXT,
+	PRIMARY KEY("epicId")
+)
+
+CREATE TABLE "issues" (
+	"issueNumber"	INTEGER NOT NULL,
+	"boardName"	TEXT NOT NULL,
+	"title"	TEXT,
+	"issueStatus"	TEXT,
+	"issueLink"	TEXT
+);
+
+CREATE TABLE "projectEpicsAndTickets" (
+	"projectEpicsAndTicketsId"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	"projectId"	INTEGER NOT NULL,
+	"id"	INTEGER NOT NULL,
+	"type"	TEXT NOT NULL DEFAULT 'epic'
+);
+
+CREATE TABLE "epicsIssues" (
+	"epicsIssueId"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	"epicId"	INTEGER NOT NULL,
+	"issueNumber"	INTEGER NOT NULL
+)
+
+CREATE TABLE "epicsIssuesRemoved" (
+	"epicsIssuesRemovedId"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	"epicId"	INTEGER NOT NULL,
+	"issueNumber"	INTEGER NOT NULL
+);
