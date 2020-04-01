@@ -11,6 +11,31 @@ def get_db():
         top.sqlite_db = sqlite3.connect(DATABASE)
     return top.sqlite_db
 
+def insert_epic(epic_issue_number, epic_title):
+    query = "INSERT INTO epics (epicId, epicName) VALUES (?, ?)"
+    args = (epic_issue_number, epic_title)
+    database = get_db()
+    database.execute(query, args)
+    res =  database.commit()
+    return res
+
+def truncate_table(table_name):
+    query = "DELETE FROM %s" %(table_name)
+    database = get_db()
+    database.execute(query)
+    res =  database.commit()
+    return res
+
+def select_all_from_table(table_name):
+    query = "SELECT * FROM %s" %(table_name)
+    database = get_db()
+    rv = database.execute(query)
+    res = rv.fetchall()
+    rv.close()
+    print(res)
+    return res
+
+
 @app.teardown_appcontext
 def close_connection(exception):
     top = _app_ctx_stack.top
