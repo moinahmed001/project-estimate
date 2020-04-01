@@ -7,7 +7,7 @@ app.config.from_pyfile('config.cfg')
 
 def fetch_issue(issue_number):
     github_root_url = app.config['GITHUB_ROOT_URL']
-    issue_url = app.config['ISSUE_URL']
+    issue_url = app.config['GITHUB_ISSUE_URL']
     issue_url = issue_url.replace("{repos}", app.config['REPOS'])
     issue_url = issue_url.replace("{issue_number}", str(issue_number))
 
@@ -18,6 +18,22 @@ def fetch_issue(issue_number):
 
     data = r.json()
     return data
+
+def fetch_issue_status(issue_number):
+    zenhub_root_url = app.config['ZENHUB_ROOT_URL']
+    issue_url = app.config['ZENHUB_ISSUE_URL']
+    issue_url = issue_url.replace("{repositories_id}", app.config['REPOSITORIES_ID'])
+    issue_url = issue_url.replace("{issue_number}", str(issue_number))
+
+    headers = {'X-Authentication-Token': app.config['ZENHUB_AUTH_TOKEN']}
+    url = zenhub_root_url + issue_url
+
+    r = requests.get(url, headers=headers)
+
+    data = r.json()
+    if "pipeline" in data:
+        return data["pipeline"]["name"]
+    return "Closed"
 
 def get_issue(issue_number):
     all_issues = db.select_all_from_table("issues")

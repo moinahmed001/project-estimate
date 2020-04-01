@@ -27,6 +27,14 @@ def insert_epics_issues(epic_id, issue_number):
     res =  database.commit()
     return res
 
+def insert_issues(issue_number, board_name, title, issue_status, issue_link):
+    query = "INSERT INTO issues (issueNumber, boardName, title, issueStatus, issueLink) VALUES (?, ?, ?, ?, ?)"
+    args = (issue_number, board_name, title, issue_status, issue_link)
+    database = get_db()
+    database.execute(query, args)
+    res =  database.commit()
+    return res
+
 def truncate_table(table_name):
     query = "DELETE FROM %s" %(table_name)
     database = get_db()
@@ -40,7 +48,6 @@ def select_all_from_table(table_name):
     rv = database.execute(query)
     res = rv.fetchall()
     rv.close()
-    print(res)
     return res
 
 

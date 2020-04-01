@@ -5,7 +5,7 @@ from flask import jsonify
 
 
 app = Flask(__name__)
-
+app.config.from_pyfile('config.cfg')
 
 @app.route('/')
 def hello():
@@ -38,11 +38,17 @@ def api_ingest_epics():
 def api_ingest_epics_issues():
     all_epics = epics.get_epics()
     db.truncate_table('epicsIssues')
+    
     for epic in all_epics["epics"]:
         epic_issues = epics.fetch_epic_issues(epic["epicId"])
         for issue in epic_issues["issues"]:
-            db.insert_epics_issues(epic["epicId"], issue["issue_number"])
-
+            issue_number = issue["issue_number"]
+            db.insert_epics_issues(epic["epicId"], issue_number)
+            issue_details = issues.fetch_issue(issue_number)
+            issue_status = issues.fetch_issue_status(issue_number)
+            print("issue number: "+ str(issue_number))
+            print(issue_status)
+            db.insert_issues(issue_number, app.config['REPOS'], issue_details['title'], issue_status, issue_details["html_url"])
     return "epics issues ingestion complete"
 
 @app.route('/api/ingest/issues')
