@@ -2,3 +2,5 @@
 - http://127.0.0.1:5000/api/issue/124 return multiple. Should insert one issue of each
 - How to add cross tv repositories into the code base. Currently hard codes into repos
 - RAID
+-Reports to be statically stored so it doesnt update
+- Reporting to have history changes
