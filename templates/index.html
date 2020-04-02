@@ -2,5 +2,133 @@
 {% extends "bootstrap/base.html" %}
 
 {% block content %}
-<h2> hello!!!</h2>
+<div class="row">
+    <div class="col-lg-12 text-center">
+        <h1 class="mt-5">New Project</h1>
+
+        <form class="needs-validation" novalidate>
+            <div class="form-row">
+                <div class="col-md-4 mb-3">
+                    <label for="projectName">Project name</label>
+                    <input type="text" class="form-control" id="projectName" placeholder="Project name" required>
+                    <div class="invalid-feedback">
+                        Please provide a name for your project
+                    </div>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="projectManager">Project manager</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroupPrepend">PM</span>
+                        </div>
+                        <input type="text" class="form-control" id="projectManager" placeholder="Project manager" required>
+                        <div class="invalid-feedback">
+                            If none assigned please type n/a
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="architectName">Architect name</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroupPrepend">A</span>
+                        </div>
+                        <input type="text" class="form-control" id="architectName" placeholder="Architect name" aria-describedby="inputGroupPrepend" required>
+                        <div class="invalid-feedback">
+                            If none assigned please type n/a
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-md-6 mb-3">
+                    <label for="businessReq">Business requirement url</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroupPrepend">WEB</span>
+                        </div>
+                        <input type="text" class="form-control" id="businessReq" placeholder="Business requirement url" required>
+                        <div class="invalid-feedback">
+                            Please provide a link to the business/product requirement
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="productOwner">Product owner</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroupPrepend">PO</span>
+                        </div>
+                        <input type="text" class="form-control" id="productOwner" placeholder="Product owner" required>
+                        <div class="invalid-feedback">
+                            Please provide the name of your project product owner
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="boardName">Board</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroupPrepend">B</span>
+                        </div>
+                        <select class="custom-select" id="boardName" required>
+                          <option value="" selected>Github boards</option>
+                          <option value="230920967">ott-web-europe</option>
+                          <option value="230921047">ott-tv-europe</option>
+                          <option value="153096326">atlas-youi</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Please choose the board this project belongs to
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-md-4 mb-3">
+                    <label for="prodReleaseDate">Prod release date</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroupPrepend">PM</span>
+                        </div>
+                        <input type="text" class="form-control js-datepicker" id="prodReleaseDate" placeholder="Prod release date" required>
+                        <div class="invalid-feedback">
+                            Please choose a date from the date picker.
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="trialReleaseDate">Trial release date</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroupPrepend">PM</span>
+                        </div>
+                        <input type="text" class="form-control js-datepicker" id="trialReleaseDate" placeholder="Trial release date" required>
+                        <div class="invalid-feedback">
+                            Please choose a date from the date picker.
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 mb-3"></div>
+                <div class="col-md-2 mb-3">
+                    <label>&nbsp;</label>
+                    <div class="input-group">
+                        <button class="btn btn-primary" type="submit">Submit form</button>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+
+        <div class="input-group">
+            <label class="label">Birthday</label>
+            <div class="input-group-icon">
+                <input class="input--style-4 js-datepicker" type="text" name="birthday">
+                <i class="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
