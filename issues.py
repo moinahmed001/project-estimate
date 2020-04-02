@@ -42,13 +42,8 @@ def fetch_issue_status(issue_number):
             return data["pipeline"]["name"]
         return "Closed"
     return "epic"
-    
-def get_issue(board_name, issue_number):
-    query = "SELECT * from issues where issueNumber=%s AND boardName='%s'" %(issue_number, board_name)
-    all_issues = db.with_query(query)
-    array_issues = {'issues':[]}
-    # todo: always returns one remove the for loop
-    for issue in all_issues:
-        array_issues["issues"].append({"issueNumber": issue[0], "boardName": issue[1], "title": issue[2], "issueStatus": issue[3], "issueLink": issue[4]})
 
-    return array_issues
+def get_issue(board_name, issue_number):
+    query = "SELECT * from issues where issueNumber=%s AND boardName='%s' LIMIT 1" %(issue_number, board_name)
+    issue = db.with_query(query)[0]
+    return {"issueNumber": issue[0], "boardName": issue[1], "title": issue[2], "issueStatus": issue[3], "issueLink": issue[4]}

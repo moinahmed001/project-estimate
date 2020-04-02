@@ -1,16 +1,20 @@
-from flask import Flask, escape, request
+from flask import Flask, escape, request, Blueprint
+from views import views_routes
 import db
 import epics, issues, projectEpicsAndTickets as peat
 from flask import jsonify
 
 
 app = Flask(__name__)
+app.register_blueprint(views_routes)
 app.config.from_pyfile('config.cfg')
 
 @app.route('/')
 def hello():
-    name = request.args.get("name", "World")
-    return f'Hello, {escape(name)}!'
+    routes = []
+    for route in app.url_map.iter_rules():
+        routes.append('{url: %s}' % route)
+    return jsonify(routes)
 
 @app.route('/api/epics')
 def api_epics():
@@ -70,6 +74,6 @@ def api_ingest_issues():
             issue_details = issues.fetch_issue(issue_number)
             db.insert_issues(issue_number, app.config['REPOS'], issue_details['title'], issue_status, issue_details["html_url"])
 
-    return 'done'
+    return 'ingested issues without Epic individually'
     # VUK010960
     # 07776824548
