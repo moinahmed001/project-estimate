@@ -1,1 +1,4 @@
 - do not insert into epics if they are closed. ie: https://github.com/sky-uk/ott-web-europe/issues/194
+- http://127.0.0.1:5000/api/issue/124 return multiple. Should insert one issue of each
+- How to add cross tv repositories into the code base. Currently hard codes into repos
+- RAID

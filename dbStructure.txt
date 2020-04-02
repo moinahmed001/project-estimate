@@ -56,7 +56,7 @@ CREATE TABLE "access" (
 CREATE TABLE "epics" (
 	"epicId"	INTEGER NOT NULL,
 	"epicName"	TEXT,
-	PRIMARY KEY("epicId")
+	"boardName"	TEXT NOT NULL
 )
 
 CREATE TABLE "issues" (
@@ -71,14 +71,16 @@ CREATE TABLE "projectEpicsAndTickets" (
 	"projectEpicsAndTicketsId"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
 	"projectId"	INTEGER NOT NULL,
 	"id"	INTEGER NOT NULL,
-	"type"	TEXT NOT NULL DEFAULT 'epic'
+	"type"	TEXT NOT NULL DEFAULT 'epic',
+	"boardName"	TEXT NOT NULL
 );
 
 CREATE TABLE "epicsIssues" (
 	"epicsIssueId"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
 	"epicId"	INTEGER NOT NULL,
-	"issueNumber"	INTEGER NOT NULL
-)
+	"issueNumber"	INTEGER NOT NULL,
+	"boardName"	TEXT NOT NULL
+);
 
 CREATE TABLE "epicsIssuesRemoved" (
 	"epicsIssuesRemovedId"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,

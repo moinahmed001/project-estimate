@@ -8,6 +8,7 @@ app.config.from_pyfile('config.cfg')
 def fetch_issue(issue_number):
     github_root_url = app.config['GITHUB_ROOT_URL']
     issue_url = app.config['GITHUB_ISSUE_URL']
+    issue_url = issue_url.replace("{github_organisation_name}", app.config['GITHUB_ORGANISATION_NAME'])
     issue_url = issue_url.replace("{repos}", app.config['REPOS'])
     issue_url = issue_url.replace("{issue_number}", str(issue_number))
 
@@ -18,6 +19,11 @@ def fetch_issue(issue_number):
 
     data = r.json()
     return data
+
+def check_issue_exists(issue_number, board_name):
+    query = "SELECT * from issues where issueNumber=%s AND boardName='%s'" %(issue_number, board_name)
+    all_issues = db.with_query(query)
+    return not all_issues
 
 def fetch_issue_status(issue_number):
     zenhub_root_url = app.config['ZENHUB_ROOT_URL']
@@ -31,13 +37,17 @@ def fetch_issue_status(issue_number):
     r = requests.get(url, headers=headers)
 
     data = r.json()
-    if "pipeline" in data:
-        return data["pipeline"]["name"]
-    return "Closed"
-
-def get_issue(issue_number):
-    all_issues = db.select_all_from_table("issues")
+    if data["is_epic"] is False:
+        if "pipeline" in data:
+            return data["pipeline"]["name"]
+        return "Closed"
+    return "epic"
+    
+def get_issue(board_name, issue_number):
+    query = "SELECT * from issues where issueNumber=%s AND boardName='%s'" %(issue_number, board_name)
+    all_issues = db.with_query(query)
     array_issues = {'issues':[]}
+    # todo: always returns one remove the for loop
     for issue in all_issues:
         array_issues["issues"].append({"issueNumber": issue[0], "boardName": issue[1], "title": issue[2], "issueStatus": issue[3], "issueLink": issue[4]})
 
