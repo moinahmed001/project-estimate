@@ -47,3 +47,26 @@ def get_issue(board_name, issue_number):
     query = "SELECT * from issues where issueNumber=%s AND boardName='%s' LIMIT 1" %(issue_number, board_name)
     issue = db.with_query(query)[0]
     return {"issueNumber": issue[0], "boardName": issue[1], "title": issue[2], "issueStatus": issue[3], "issueLink": issue[4]}
+
+def get_issues():
+    all_issues = db.select_all_from_table("issues")
+    array_issues = {'issues':[]}
+    for issue in all_issues:
+        array_issues["issues"].append({
+            "issueNumber": issue[0],
+            "boardName": issue[1],
+            "title": issue[2],
+            "issueStatus": issue[3],
+            "issueLink": issue[4]
+        })
+
+    return array_issues
+
+def insert_issues(issue_number, board_name, title, issue_status, issue_link):
+    query = "INSERT INTO issues (issueNumber, boardName, title, issueStatus, issueLink) VALUES (?, ?, ?, ?, ?)"
+    args = (issue_number, board_name, title, issue_status, issue_link)
+    return db.insert_query(query, args)
+
+def delete_all_issues_for_board():
+    delete_issues_query = "DELETE FROM issues where boardName = '%s'" %(app.config['REPOS'])
+    db.with_query(delete_issues_query)
