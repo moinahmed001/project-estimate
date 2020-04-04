@@ -45,11 +45,14 @@ def fetch_issue_status(issue_number):
 
 def get_issue(board_name, issue_number):
     query = "SELECT * from issues where issueNumber=%s AND boardName='%s' LIMIT 1" %(issue_number, board_name)
-    issue = db.with_query(query)[0]
-    return {"issueNumber": issue[0], "boardName": issue[1], "title": issue[2], "issueStatus": issue[3], "issueLink": issue[4]}
+    issue = db.with_query(query)
+    return loop_all_issues(issue)
 
 def get_issues():
     all_issues = db.select_all_from_table("issues")
+    return loop_all_issues(all_issues)
+
+def loop_all_issues(all_issues):
     array_issues = {'issues':[]}
     for issue in all_issues:
         array_issues["issues"].append({

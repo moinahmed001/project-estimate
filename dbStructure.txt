@@ -47,11 +47,11 @@ CREATE TABLE "contingency" (
 	"description"	TEXT
 );
 
-CREATE TABLE "access" (
-	"accessId"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+CREATE TABLE "userProjectAccess" (
+	"userProjectAccessId"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
 	"userId"	INTEGER NOT NULL,
-	"proejctId"	INTEGER NOT NULL
-)
+	"projectId"	INTEGER NOT NULL
+);
 
 CREATE TABLE "epics" (
 	"epicId"	INTEGER NOT NULL,
