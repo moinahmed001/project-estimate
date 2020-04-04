@@ -14,6 +14,19 @@ def get_epics_issues():
     all_epics_issues = db.select_all_from_table("epicsIssues")
     return loop_all_epics_issues(all_epics_issues)
 
+def get_epic_issues_full_details(board_name, epic_number):
+    query = "SELECT ei.issueNumber, i.title from epicsIssues as ei JOIN issues as i on ei.issueNumber = i.issueNumber WHERE ei.epicId=%s AND ei.boardName='%s'" %(epic_number, board_name)
+    all_epics_issues = db.with_query(query)
+    
+    array_epics_issues = {'epicsIssues':[]}
+    for epics_issue in all_epics_issues:
+        array_epics_issues["epicsIssues"].append({
+            "issueNumber": epics_issue[0],
+            "title": epics_issue[1]
+        });
+
+    return array_epics_issues
+
 def loop_all_epics_issues(all_epics_issues):
     array_epics_issues = {'epicsIssues':[]}
     for epics_issue in all_epics_issues:

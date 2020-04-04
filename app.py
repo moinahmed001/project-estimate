@@ -100,5 +100,9 @@ def api_issue(board_name, issue_number):
     return issuesModel.get_issue(board_name, issue_number)
 
 @app.route('/api/epicsIssues/<board_name>/<epic_number>')
-def api_epicsIssues(board_name, epic_number):
+def api_epic_issues(board_name, epic_number):
     return epicsIssuesModel.get_epic_issues(board_name, epic_number)
+
+@app.route('/api/epicIssuesFullDetails/<board_name>/<epic_number>')
+def api_epic_issues_full_details(board_name, epic_number):
+    return epicsIssuesModel.get_epic_issues_full_details(board_name, epic_number)
