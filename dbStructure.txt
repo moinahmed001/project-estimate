@@ -9,16 +9,23 @@ CREATE TABLE "users" (
 )
 
 CREATE TABLE "projects" (
-	"projectId"	INTEGER NOT NULL,
-	"userId"	INTEGER NOT NULL,
-	"projectName"	TEXT NOT NULL,
+	"projectId"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	"projectCreateduserId"	INTEGER NOT NULL,
+	"projectName"	TEXT NOT NULL UNIQUE,
+	"boardName"	TEXT NOT NULL,
 	"businesReqUrl"	TEXT,
 	"projectManager"	TEXT,
 	"architect"	TEXT,
 	"productOwner"	TEXT,
 	"trialDate"	TEXT,
 	"releaseDate"	TEXT
-)
+);
+
+CREATE TABLE "boards" (
+	"repoId"	INTEGER NOT NULL UNIQUE,
+	"boardName"	TEXT NOT NULL UNIQUE,
+	PRIMARY KEY("repoId")
+);
 
 CREATE TABLE "tickets" (
 	"ticketId"	INTEGER NOT NULL,

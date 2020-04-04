@@ -4,3 +4,4 @@
 - RAID
 -Reports to be statically stored so it doesnt update
 - Reporting to have history changes
+- If its busy ingesting all to not allow any other pages to work

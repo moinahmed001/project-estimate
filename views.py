@@ -6,6 +6,7 @@ views_routes = Blueprint('views_routes', __name__)
 def test():
     return 'it works!'
 
-@views_routes.route('/test1')
-def index():
-    return render_template("index.html")
+@views_routes.route('/project')
+def project():
+    # check if session has error and then display it with the form data
+    return render_template("project.html")

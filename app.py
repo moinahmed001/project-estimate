@@ -1,7 +1,7 @@
-from flask import Flask, escape, request, Blueprint
+from flask import Flask, escape, request, Blueprint, redirect, url_for
 from views import views_routes
 from ingestApi import ingest_api_routes
-import epicsModel, issuesModel, projectEpicsAndTicketsModel as peatm, projectsModel, epicsIssuesModel, ticketsModel, userProjectAccessModel, reportingModel, epicsIssuesRemovedModel, contingencyModel
+import epicsModel, issuesModel, projectEpicsAndTicketsModel as peatm, projectsModel, epicsIssuesModel, ticketsModel, userProjectAccessModel, reportingModel, epicsIssuesRemovedModel, contingencyModel, boardsModel
 from flask import jsonify
 
 
@@ -11,16 +11,58 @@ app.register_blueprint(ingest_api_routes)
 app.config.from_pyfile('config.cfg')
 
 @app.route('/')
-def hello():
+def all_available_urls():
     routes = []
-    print(app.url_map)
     for route in app.url_map.iter_rules():
         routes.append('{url: %s}' % route)
     return jsonify(routes)
 
+
+
+@app.route('/api/post/project', methods=['GET', 'POST'])
+def api_post_project():
+    response = {}
+    response["status"] = "error"
+    if request.method == 'POST':
+        # validate the form
+        if projectsModel.validate_form(request.form):
+            # check if the project already exists
+            if projectsModel.get_project(request.form)["projects"] == []:
+
+                # check if the board name is valid
+                if boardsModel.get_board(request.form["repoId"])["boards"] != []:
+                    projectsModel.insert_project(request.form)
+                    project_id = projectsModel.get_project(request.form)["projects"][0]["projectId"]
+                    url_created = 'projectEpicsAndTickets?projectId='+str(project_id)
+                    print(url_created)
+                    # response["redirectUrl"] = url_for(url_created)
+                    response["status"] = "success"
+                else:
+                    response["message"] = "could not find the board "
+
+            else:
+                response["message"] = "This project already exists"
+
+        else:
+
+            response["message"] = "failed to validate the form"
+            # response["projectData"] = request.form
+            response["redirectUrl"] = url_for('views_routes.project')
+    else:
+        response["message"] = "request was not a POST "
+        response["redirectUrl"] = url_for('views_routes.project')
+
+    return jsonify(response)
+
+
+
 @app.route('/api/epics')
 def api_epics():
     return jsonify(epicsModel.get_epics())
+
+@app.route('/api/boards')
+def api_boards():
+    return jsonify(boardsModel.get_boards())
 
 @app.route('/api/issues')
 def api_issues():

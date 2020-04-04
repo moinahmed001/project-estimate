@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template
-import epicsModel, issuesModel, projectEpicsAndTicketsModel as peatm, projectsModel, epicsIssuesModel, ticketsModel, userProjectAccessModel, reportingModel, epicsIssuesRemovedModel, contingencyModel
+import epicsModel, issuesModel, projectEpicsAndTicketsModel as peatm, epicsIssuesModel
 
 ingest_api_routes = Blueprint('ingest_api_routes', __name__)
 
