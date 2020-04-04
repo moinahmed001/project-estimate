@@ -58,9 +58,6 @@ cover/
 
 # Django stuff:
 *.log
-local_settings.py
-db.sqlite3
-db.sqlite3-journal
 
 # Flask stuff:
 instance/
@@ -140,4 +137,3 @@ cython_debug/
 
 # static files generated from Django application using `collectstatic`
 media
-static
