@@ -18,6 +18,11 @@ def get_project(form):
 
     return {'projects':[]}
 
+def get_project_with_id(projectId):
+    query = "SELECT * from projects where projectId=%s LIMIT 1" %(projectId)
+    project = db.with_query(query)
+    return loop_all_projects(project)
+
 def fetch_board_name(form):
     repo_id = check_field_and_get_value(form, "repoId")
     board_name = None
@@ -32,9 +37,9 @@ def validate_form(form):
     return False
 
 def insert_project(form):
-    query = "INSERT INTO projects (projectCreateduserId, projectName, boardName, businesReqUrl, projectManager, architect, productOwner, trialDate, releaseDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+    query = "INSERT INTO projects (projectCreateduserId, projectName, boardName, businessReqUrl, projectManager, architect, productOwner, trialDate, releaseDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
 
-    args = (check_field_and_get_value(form, "projectCreateduserId"), check_field_and_get_value(form, "projectName"), fetch_board_name(form), check_field_and_get_value(form, "businesReqUrl"), check_field_and_get_value(form, "projectManager"), check_field_and_get_value(form, "architect"), check_field_and_get_value(form, "productOwner"), check_field_and_get_value(form, "trialDate"), check_field_and_get_value(form, "releaseDate"))
+    args = (check_field_and_get_value(form, "projectCreateduserId"), check_field_and_get_value(form, "projectName"), fetch_board_name(form), check_field_and_get_value(form, "businessReqUrl"), check_field_and_get_value(form, "projectManager"), check_field_and_get_value(form, "architect"), check_field_and_get_value(form, "productOwner"), check_field_and_get_value(form, "trialDate"), check_field_and_get_value(form, "releaseDate"))
 
     return db.insert_query(query, args)
 
@@ -53,7 +58,7 @@ def loop_all_projects(all_projects):
             "projectCreateduserId": project[1],
             "projectName": project[2],
             "boardName": project[3],
-            "businesReqUrl": project[4],
+            "businessReqUrl": project[4],
             "projectManager": project[5],
             "architect": project[6],
             "productOwner": project[7],

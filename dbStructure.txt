@@ -13,7 +13,7 @@ CREATE TABLE "projects" (
 	"projectCreateduserId"	INTEGER NOT NULL,
 	"projectName"	TEXT NOT NULL UNIQUE,
 	"boardName"	TEXT NOT NULL,
-	"businesReqUrl"	TEXT,
+	"businessReqUrl"	TEXT,
 	"projectManager"	TEXT,
 	"architect"	TEXT,
 	"productOwner"	TEXT,

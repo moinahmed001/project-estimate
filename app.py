@@ -25,6 +25,7 @@ def api_post_project():
     response["status"] = "error"
     if request.method == 'POST':
         # validate the form
+        print(request.form)
         if projectsModel.validate_form(request.form):
             # check if the project already exists
             if projectsModel.get_project(request.form)["projects"] == []:
@@ -33,9 +34,8 @@ def api_post_project():
                 if boardsModel.get_board(request.form["repoId"])["boards"] != []:
                     projectsModel.insert_project(request.form)
                     project_id = projectsModel.get_project(request.form)["projects"][0]["projectId"]
-                    url_created = 'projectEpicsAndTickets?projectId='+str(project_id)
-                    print(url_created)
-                    # response["redirectUrl"] = url_for(url_created)
+                    url_created = 'views_routes.projectEpicsAndTickets'
+                    response["redirectUrl"] = url_for(url_created, project_id=project_id)
                     response["status"] = "success"
                 else:
                     response["message"] = "could not find the board "
@@ -44,7 +44,6 @@ def api_post_project():
                 response["message"] = "This project already exists"
 
         else:
-
             response["message"] = "failed to validate the form"
             # response["projectData"] = request.form
             response["redirectUrl"] = url_for('views_routes.project')

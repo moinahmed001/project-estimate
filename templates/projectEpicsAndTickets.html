@@ -4,19 +4,13 @@
 {% block content %}
 <div class="row">
     <div class="col-lg-12 text-center">
-        <h1 class="mt-5">New Project</h1>
+        {% if project %}
+            <h1 class="mt-5">Project Estimation Page</h1>
 
-        <form class="needs-validation" id="projectForm" novalidate>
             <div class="form-row">
                 <div class="col-md-4 mb-3">
                     <label for="projectName">Project name</label>
-                    <input type="text" value="bla test" class="form-control" autocomplete="off" id="projectName" name="projectName" placeholder="Project name" required>
-                    <div class="invalid-feedback">
-                        Please provide a name for your project
-                    </div>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
+                    <input type="text" disabled value="{{ project.projectName }}" class="form-control" autocomplete="off" id="projectName" name="projectName" placeholder="Project name">
                 </div>
                 <div class="col-md-4 mb-3">
                     <label for="projectManager">Project manager</label>
@@ -24,10 +18,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="inputGroupPrepend">PM</span>
                         </div>
-                        <input type="text" value="bla test" class="form-control" autocomplete="off" id="projectManager" name="projectManager" placeholder="Project manager" required>
-                        <div class="invalid-feedback">
-                            If none assigned please type n/a
-                        </div>
+                        <input type="text" disabled value="{{ project.projectManager }}" class="form-control" autocomplete="off" id="projectManager" name="projectManager" placeholder="Project manager">
                     </div>
                 </div>
                 <div class="col-md-4 mb-3">
@@ -36,10 +27,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="inputGroupPrepend">A</span>
                         </div>
-                        <input type="text" value="bla test" class="form-control" autocomplete="off" id="architectName" name="architectName" placeholder="Architect name" aria-describedby="inputGroupPrepend" required>
-                        <div class="invalid-feedback">
-                            If none assigned please type n/a
-                        </div>
+                        <input type="text" disabled value="{{ project.architectName }}" class="form-control" autocomplete="off" id="architectName" name="architectName" placeholder="Architect name" aria-describedby="inputGroupPrepend">
                     </div>
                 </div>
             </div>
@@ -50,10 +38,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="inputGroupPrepend">WEB</span>
                         </div>
-                        <input type="text" value="bla test" class="form-control" autocomplete="off" id="businessReqUrl" name="businessReqUrl" placeholder="Business requirement url" required>
-                        <div class="invalid-feedback">
-                            Please provide a link to the business/product requirement
-                        </div>
+                        <input type="text" disabled value="{{ project.businessReqUrl }}" class="form-control" autocomplete="off" id="businessReqUrl" name="businessReqUrl" placeholder="Business requirement url">
                     </div>
                 </div>
                 <div class="col-md-3 mb-3">
@@ -62,10 +47,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="inputGroupPrepend">PO</span>
                         </div>
-                        <input type="text" value="bla test" class="form-control" autocomplete="off" id="productOwner" name="productOwner" placeholder="Product owner" required>
-                        <div class="invalid-feedback">
-                            Please provide the name of your project product owner
-                        </div>
+                        <input type="text" disabled value="{{ project.productOwner }}" class="form-control" autocomplete="off" id="productOwner" name="productOwner" placeholder="Product owner">
                     </div>
                 </div>
                 <div class="col-md-3 mb-3">
@@ -74,15 +56,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="inputGroupPrepend">B</span>
                         </div>
-                        <select class="custom-select" id="repoId" name="repoId" required>
-                          <option value="" selected>Zenhub boards</option>
-                          {% for board in boards %}
-                              <option value="{{ board.repoId }}">{{ board.boardName }}</option>
-                          {% endfor %}
-                        </select>
-                        <div class="invalid-feedback">
-                            Please choose the board this project belongs to
-                        </div>
+                        <input type="text" disabled value="{{ project.boardName }}" autocomplete="off" class="form-control" id="repoId" name="repoId">
                     </div>
                 </div>
             </div>
@@ -93,10 +67,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="inputGroupPrepend">PM</span>
                         </div>
-                        <input type="text" autocomplete="off" class="form-control js-datepicker" id="releaseDate" name="releaseDate" placeholder="Prod release date" required>
-                        <div class="invalid-feedback">
-                            Please choose a date from the date picker.
-                        </div>
+                        <input type="text" disabled value="{{ project.releaseDate }}" autocomplete="off" class="form-control" id="releaseDate" name="releaseDate">
                     </div>
                 </div>
                 <div class="col-md-4 mb-3">
@@ -105,7 +76,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="inputGroupPrepend">PM</span>
                         </div>
-                        <input type="text" autocomplete="off" class="form-control js-datepicker" id="trialDate" name="trialDate" placeholder="Trial release date">
+                        <input type="text" disabled value="{{ project.trialDate }}" autocomplete="off" class="form-control" id="trialDate" name="trialDate">
                     </div>
                 </div>
                 <div class="col-md-2 mb-3"></div>
@@ -113,18 +84,45 @@
                     <label>&nbsp;</label>
                     <div class="input-group">
                         <input type="hidden" name="projectCreateduserId" value="1">
-                        <button class="btn btn-primary" type="submit">Submit form</button>
                     </div>
                 </div>
             </div>
+            <!-- The form starts -->
+            <form class="needs-validation" id="projectEpicsForm" novalidate>
 
-        </form>
-
+                <div class="form-row">
+                    <div class="col-md-8 mb-3">
+                        <label for="repoId">Choose an Epic to fetch its issues</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroupPrepend">E</span>
+                            </div>
+                            <select class="custom-select" id="repoId" name="repoId" required>
+                                <option value="" selected>Select Epics</option>
+                                {% for epic in epics %}
+                                    <option value="{{ epic.epicId }}">{{ epic.epicName }}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="invalid-feedback">
+                                Please choose an epic you would like to fetch its issue for this project
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 mb-3"></div>
+                    <div class="col-md-2 mb-3">
+                        <label>&nbsp;</label>
+                        <div class="input-group">
+                            <input type="hidden" name="projectCreateduserId" value="1">
+                            <button class="btn btn-primary" type="submit">Fetch </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        {% endif %}
     </div>
 </div>
-
 {% endblock %}
 
 {% block script %}
-<script src="{{ url_for('static', filename='js/projectForm.js') }}"></script>
+<script src="{{ url_for('static', filename='js/projectEpicsAndTicketsForm.js') }}"></script>
 {% endblock %}
