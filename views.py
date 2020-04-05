@@ -8,7 +8,7 @@ def project():
     boards = None
     if boardsModel.get_boards()["boards"] != []:
         boards = boardsModel.get_boards()["boards"]
-    print(boards)
+    # print(boards)
     # check if session has error and then display it with the form data
     return render_template("project.html", boards=boards)
 
@@ -22,9 +22,7 @@ def projectEpicsAndTickets(project_id):
     if epicsModel.get_epics()["epics"] != []:
         # TODO: get epics that are not in the projectEpicsAndTickets table
         epics = epicsModel.get_epics()["epics"]
-    if peatm.get_epics_and_issues_with_project_id(project_id)["projectEpicsIssues"] != []:
-        peat = peatm.get_epics_and_issues_with_project_id(project_id)["projectEpicsIssues"]
-    # print(project)
-    # print(epics)
-    print(peat)
+    peat = peatm.get_epics_and_issues_with_project_id(project_id)["projectEpicsIssues"]
+
+    # print(peat)
     return render_template("projectEpicsAndTickets.html", project=project, epics=epics, peats=peat)

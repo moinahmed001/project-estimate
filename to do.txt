@@ -2,10 +2,11 @@
 - http://127.0.0.1:5000/api/issue/124 return multiple. Should insert one issue of each
 - How to add cross tv repositories into the code base. Currently hard codes into repos
 - RAID
--Reports to be statically stored so it doesnt update
+- Reports to be statically stored so it doesnt update
 - Reporting to have history changes
 - If its busy ingesting all to not allow any other pages to work
 - Ingestion status with last time ingested
 - View all projects
 -- View projects that are editable/ mine
 - Remove epic that has been chosen for the project to avoid having duplicate
+- option to remove epics from the board too

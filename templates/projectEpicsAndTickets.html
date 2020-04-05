@@ -5,104 +5,134 @@
 <div class="row">
     <div class="col-lg-12 text-center">
         {% if project %}
-            <h1 class="mt-5">Project Estimation Page</h1>
+        <h1 class="mt-5">Project Estimation Page</h1>
 
-            <div class="form-row">
-                <div class="col-md-4 mb-3">
-                    <label for="projectName">Project name</label>
-                    <input type="text" disabled value="{{ project.projectName }}" class="form-control" autocomplete="off" id="projectName" name="projectName" placeholder="Project name">
-                </div>
-                <div class="col-md-4 mb-3">
-                    <label for="projectManager">Project manager</label>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="inputGroupPrepend">PM</span>
-                        </div>
-                        <input type="text" disabled value="{{ project.projectManager }}" class="form-control" autocomplete="off" id="projectManager" name="projectManager" placeholder="Project manager">
+        <div class="form-row">
+            <div class="col-md-4 mb-3">
+                <label for="projectName">Project name</label>
+                <input type="text" disabled value='{{ project.projectName|default("", true) }}' class="form-control" autocomplete="off" id="projectName" name="projectName" placeholder="Project name">
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="projectManager">Project manager</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroupPrepend">PM</span>
                     </div>
-                </div>
-                <div class="col-md-4 mb-3">
-                    <label for="architectName">Architect name</label>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="inputGroupPrepend">A</span>
-                        </div>
-                        <input type="text" disabled value="{{ project.architectName }}" class="form-control" autocomplete="off" id="architectName" name="architectName" placeholder="Architect name" aria-describedby="inputGroupPrepend">
-                    </div>
+                    <input type="text" disabled value='{{ project.projectManager|default("", true) }}' class="form-control" autocomplete="off" id="projectManager" name="projectManager" placeholder="Project manager">
                 </div>
             </div>
-            <div class="form-row">
-                <div class="col-md-6 mb-3">
-                    <label for="businessReqUrl">Business requirement url</label>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="inputGroupPrepend">WEB</span>
-                        </div>
-                        <input type="text" disabled value="{{ project.businessReqUrl }}" class="form-control" autocomplete="off" id="businessReqUrl" name="businessReqUrl" placeholder="Business requirement url">
+            <div class="col-md-4 mb-3">
+                <label for="architectName">Architect name</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroupPrepend">A</span>
                     </div>
-                </div>
-                <div class="col-md-3 mb-3">
-                    <label for="productOwner">Product owner</label>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="inputGroupPrepend">PO</span>
-                        </div>
-                        <input type="text" disabled value="{{ project.productOwner }}" class="form-control" autocomplete="off" id="productOwner" name="productOwner" placeholder="Product owner">
-                    </div>
-                </div>
-                <div class="col-md-3 mb-3">
-                    <label for="boardName">Board</label>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="inputGroupPrepend">B</span>
-                        </div>
-                        <input type="text" disabled value="{{ project.boardName }}" autocomplete="off" class="form-control" id="boardName" name="boardName">
-                    </div>
+                    <input type="text" disabled value='{{ project.architectName|default("", true) }}' class="form-control" autocomplete="off" id="architectName" name="architectName" placeholder="Architect name" aria-describedby="inputGroupPrepend">
                 </div>
             </div>
-            <div class="form-row">
-                <div class="col-md-4 mb-3">
-                    <label for="releaseDate">Prod release date</label>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="inputGroupPrepend">PM</span>
-                        </div>
-                        <input type="text" disabled value="{{ project.releaseDate }}" autocomplete="off" class="form-control" id="releaseDate" name="releaseDate">
+        </div>
+        <div class="form-row">
+            <div class="col-md-6 mb-3">
+                <label for="businessReqUrl">Business requirement url</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroupPrepend">WEB</span>
                     </div>
-                </div>
-                <div class="col-md-4 mb-3">
-                    <label for="trialDate">Trial release date</label>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="inputGroupPrepend">PM</span>
-                        </div>
-                        <input type="text" disabled value="{{ project.trialDate }}" autocomplete="off" class="form-control" id="trialDate" name="trialDate">
-                    </div>
-                </div>
-                <div class="col-md-2 mb-3"></div>
-                <div class="col-md-2 mb-3">
-                    <label>&nbsp;</label>
-                    <div class="input-group">
-                        <input type="hidden" name="projectCreateduserId" value="1">
-                        <input type="hidden" name="projectId" id="projectId" value="{{ project.projectId }}">
-                    </div>
+                    <input type="text" disabled value='{{ project.businessReqUrl|default("", true) }}' class="form-control" autocomplete="off" id="businessReqUrl" name="businessReqUrl" placeholder="Business requirement url">
                 </div>
             </div>
-            <!--  -->
-            <!-- TODO:  Check if the  projectEpicsAndTickets has rows in DB that can be added here-->
-            <!--  -->
-            <div class="row text-left">
-                <div class="col">
-
-                    <!-- {{ peats }} -->
-                    {% for peat in peats %}
-                        {{ peat.epicName }}
+            <div class="col-md-3 mb-3">
+                <label for="productOwner">Product owner</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroupPrepend">PO</span>
+                    </div>
+                    <input type="text" disabled value='{{ project.productOwner|default("", true) }}' class="form-control" autocomplete="off" id="productOwner" name="productOwner" placeholder="Product owner">
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <label for="boardName">Board</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroupPrepend">B</span>
+                    </div>
+                    <input type="text" disabled value='{{ project.boardName|default("", true) }}' autocomplete="off" class="form-control" id="boardName" name="boardName">
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-md-4 mb-3">
+                <label for="releaseDate">Prod release date</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroupPrepend">PM</span>
+                    </div>
+                    <input type="text" disabled value='{{ project.releaseDate|default("", true) }}' autocomplete="off" class="form-control" id="releaseDate" name="releaseDate">
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="trialDate">Trial release date</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroupPrepend">PM</span>
+                    </div>
+                    <input type="text" disabled value='{{ project.trialDate|default("", true) }}' autocomplete="off" class="form-control" id="trialDate" name="trialDate">
+                </div>
+            </div>
+            <div class="col-md-2 mb-3"></div>
+            <div class="col-md-2 mb-3">
+                <label>&nbsp;</label>
+                <div class="input-group">
+                    <input type="hidden" name="projectCreateduserId" value="1">
+                    <input type="hidden" name="projectId" id="projectId" value='{{ project.projectId|default("", true) }}'>
+                </div>
+            </div>
+        </div>
+        <!--  -->
+        <!-- TODO:  Check if the  projectEpicsAndTickets has rows in DB that can be added here-->
+        <!--  -->
+        {% for peat in peats %}
+        <div class="row text-left">
+            <div class="col">
+                <h2 class="mt-5">{{ peat.epicName }}</h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Issue #</th>
+                            <th scope="col">Title</th>
+                            <th scope="col">Dependant system</th>
+                            <th scope="col">Dependant reason</th>
+                            <th scope="col">Dev est in days</th>
+                            <th scope="col">QA est in days</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Scope / Releasing to</th>
+                            <th scope="col">Total comments</th>
+                            <th scope="col">Notes</th>
+                            <th scope="col">Shared platform Issue?</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                         {% for ticket in peat.allTickets %}
-                            {{ticket.issueNumber}}
-                        {% endfor %}
-                    {% endfor %}
+                        <tr>
+                            <th scope="row"><a href='{{ ticket.issueLink|default("", true) }}' target="_blank">{{ticket.issueNumber|default("", true)}}</a></th>
+                            <td>{{ticket.title|default("", true)}}</td>
+                            <td>{{ticket.dependantSystem|default("", true)}}</td>
+                            <td>{{ticket.dependantReason|default("", true)}}</td>
+                            <td>{{ticket.devEstimateInDays|default("", true)}}</td>
+                            <td>{{ticket.qaEstimateInDays|default("", true)}}</td>
+                            <td>{{ticket.issueStatus|default("", true)}}</td>
+                            <td>{{ticket.proposedReleaseDropTo|default("", true)}}</td>
+                            <td>{{ticket.totalComments|default("", true)}}</td>
+                            <td>{{ticket.notes|default("", true)}}</td>
+                            <td>{{ticket.sharedPlatformIssue|default("", true)}}</td>
+                        </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
+            {% endfor %}
+
             <!-- The form starts -->
             <form class="needs-validation" id="projectEpicsForm" novalidate>
 
@@ -115,8 +145,8 @@
                             </div>
                             <select class="custom-select" id="epicId" name="epicId" required>
                                 <option value="" selected>Select Epics</option>
-                                {% for epic in epics %}
-                                    <option value="{{ epic.epicId }}">{{ epic.epicName }}</option>
+                                {% for epic in epics|sort(attribute='epicName') %}
+                                <option value='{{ epic.epicId|default("", true) }}'>{{ epic.epicName|default("", true) }}</option>
                                 {% endfor %}
                             </select>
                             <div class="invalid-feedback">
@@ -130,7 +160,7 @@
                         <div class="input-group">
                             <!-- Button trigger modal -->
                             <button type="button" class="btn btn-primary d-none" data-toggle="modal" data-target=".bd-example-modal-lg" id="hiddenFetchButton">
-                              hidden modal button
+                                hidden modal button
                             </button>
                             <button class="btn btn-primary" type="submit">Fetch </button>
                         </div>
@@ -148,7 +178,7 @@
                             </div>
                             <input type="text" class="form-control" autocomplete="off" id="issue" name="issue" placeholder="Issue Number" required>
                             <div class="invalid-feedback">
-                                A specific issue number is required and it must be from the {{ project.boardName }} board
+                                A specific issue number is required and it must be from the {{ project.boardName|default("", true) }} board
                             </div>
                         </div>
                     </div>
@@ -166,29 +196,29 @@
             <!-- Modal -->
             <div class="modal fade bd-example-modal-lg" id="epicsIssuesModal" tabindex="-1" role="dialog" aria-labelledby="epicsModalLabel" aria-hidden="true">
 
-              <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="epicsModalLabel">Modal title</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body text-left" id="fetchedEpicData">
-                    ...
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" id="addIssueButton">Add issues to project</button>
-                  </div>
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="epicsModalLabel">Modal title</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body text-left" id="fetchedEpicData">
+                            ...
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-primary" id="addIssueButton">Add issues to project</button>
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
-        {% endif %}
+            {% endif %}
+        </div>
     </div>
-</div>
-{% endblock %}
+    {% endblock %}
 
-{% block script %}
-<script src="{{ url_for('static', filename='js/projectEpicsAndTicketsForm.js') }}"></script>
-{% endblock %}
+    {% block script %}
+    <script src="{{ url_for('static', filename='js/projectEpicsAndTicketsForm.js') }}"></script>
+    {% endblock %}

@@ -21,7 +21,8 @@ def api_ingest_epics():
     for epic_issue in epic_issues:
         epic_issue_number = epic_issue['issue_number']
         epic_issue_details = issuesModel.fetch_issue(epic_issue_number)
-        epicsModel.insert_epics(epic_issue_number, epic_issue_details['title'], "ott-web-europe")
+        if epic_issue_details["state"] != "closed":
+            epicsModel.insert_epics(epic_issue_number, epic_issue_details['title'], "ott-web-europe")
 
     return "epics ingestion is complete"
 
@@ -31,7 +32,7 @@ def api_test():
     ticket_issue = {"boardName": "ott-web-europe", "issueNumber": 1, "totalComments": 2}
     ticketsModel.insert_or_update_ticket(ticket_issue)
     return "do"
-    
+
 @ingest_api_routes.route('/api/ingest/epicsIssues')
 def api_ingest_epics_issues():
     all_epics = epicsModel.get_epics()
@@ -42,11 +43,11 @@ def api_ingest_epics_issues():
         epic_issues = epicsIssuesModel.fetch_epic_issues(epic["epicId"])
         for issue in epic_issues["issues"]:
             issue_number = issue["issue_number"]
-            epicsIssuesModel.insert_epics_issues(epic["epicId"], issue_number, "ott-web-europe")
-            issue_does_not_exists = issuesModel.check_issue_exists(issue_number, "ott-web-europe")
-            if issue_does_not_exists:
-                issue_status = issuesModel.fetch_issue_status(issue_number)
-                if issue_status is not "epic":
+            issue_status = issuesModel.fetch_issue_status(issue_number)
+            if issue_status is not "epic":
+                epicsIssuesModel.insert_epics_issues(epic["epicId"], issue_number, "ott-web-europe")
+                issue_does_not_exists = issuesModel.check_issue_exists(issue_number, "ott-web-europe")
+                if issue_does_not_exists:
                     issue_details = issuesModel.fetch_issue(issue_number)
                     issuesModel.insert_issues(issue_number, "ott-web-europe", issue_details["title"], issue_status, issue_details["html_url"])
                     # insert into the tickets too if it doesnt exists otherwise update it

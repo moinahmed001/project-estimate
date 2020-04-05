@@ -37,13 +37,21 @@ def get_epics_and_issues_with_project_id(projectId):
 
                     for epic_issue in all_epics_issues:
                         if epic_issue is not None:
-                            ticket = ticketsModel.get_tickets_with_boardName_and_issueNumber(boardName, epic_issue["issueNumber"])["tickets"][0]
+                            ticket = ticketsModel.get_tickets_with_boardName_and_issueNumber(boardName, epic_issue["issueNumber"])
+                            print(">>>>>")
+                            print(epic_issue)
+                            print(">>>>> adding ticket: ")
+
+                            print(ticket)
                             array_issues["projectEpicsIssues"][-1]["allTickets"].append(ticket)
 
             elif epic_and_issue[1] == 'issue':
+                print(">>>>> issue type: SHouldnt be here!")
+                print(epic_and_issue)
+                # TODO: test this path!
                 issueNumber = epic_and_issue[0]
-                ticket = ticketsModel.get_tickets_with_boardName_and_issueNumber(boardName, issueNumber)["tickets"][0]
-                array_issues["projectEpicsIssues"].append(ticket)
+                ticket = ticketsModel.get_tickets_with_boardName_and_issueNumber(boardName, issueNumber)
+                # array_issues["projectEpicsIssues"].append(ticket)
     return array_issues
 
 def get_all_epics_issues_for_project(projectId):
