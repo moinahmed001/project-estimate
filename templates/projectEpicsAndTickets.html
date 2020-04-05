@@ -91,7 +91,17 @@
             <!--  -->
             <!-- TODO:  Check if the  projectEpicsAndTickets has rows in DB that can be added here-->
             <!--  -->
-            <div class="col-lg-12 text-left" id="">
+            <div class="row text-left">
+                <div class="col">
+
+                    <!-- {{ peats }} -->
+                    {% for peat in peats %}
+                        {{ peat.epicName }}
+                        {% for ticket in peat.allTickets %}
+                            {{ticket.issueNumber}}
+                        {% endfor %}
+                    {% endfor %}
+                </div>
             </div>
             <!-- The form starts -->
             <form class="needs-validation" id="projectEpicsForm" novalidate>
@@ -119,7 +129,7 @@
                         <label>&nbsp;</label>
                         <div class="input-group">
                             <!-- Button trigger modal -->
-                            <button type="button" class="btn btn-primary invisible" data-toggle="modal" data-target=".bd-example-modal-lg" id="hiddenFetchButton">
+                            <button type="button" class="btn btn-primary d-none" data-toggle="modal" data-target=".bd-example-modal-lg" id="hiddenFetchButton">
                               hidden modal button
                             </button>
                             <button class="btn btn-primary" type="submit">Fetch </button>

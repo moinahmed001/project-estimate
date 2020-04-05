@@ -20,11 +20,11 @@ def projectEpicsAndTickets(project_id):
     if projectsModel.get_project_with_id(project_id)["projects"] != []:
         project = projectsModel.get_project_with_id(project_id)["projects"][0]
     if epicsModel.get_epics()["epics"] != []:
+        # TODO: get epics that are not in the projectEpicsAndTickets table
         epics = epicsModel.get_epics()["epics"]
-        # get all the tickets and issues as one table with all the information
     if peatm.get_epics_and_issues_with_project_id(project_id)["projectEpicsIssues"] != []:
         peat = peatm.get_epics_and_issues_with_project_id(project_id)["projectEpicsIssues"]
     # print(project)
     # print(epics)
     print(peat)
-    return render_template("projectEpicsAndTickets.html", project=project, epics=epics, peat=peat)
+    return render_template("projectEpicsAndTickets.html", project=project, epics=epics, peats=peat)

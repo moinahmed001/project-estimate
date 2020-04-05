@@ -1,6 +1,6 @@
 import requests, json
 import db
-import ticketsModel, epicsIssuesModel
+import ticketsModel, epicsIssuesModel, epicsModel
 from flask import Flask
 
 app = Flask(__name__)
@@ -25,18 +25,25 @@ def get_epics_and_issues_with_project_id(projectId):
 
     array_issues = {'projectEpicsIssues':[]}
     for epic_and_issue in project_epics_and_issues:
-        boardName = epic_and_issue[3]
-        if epic_and_issue[1] == 'epic':
-            epic_number = epic_and_issue[0]
-            all_epics_issues = epicsIssuesModel.get_epic_issues(boardName, epic_number)["epicsIssues"]
-            for epic_issue in all_epics_issues:
-                ticket = ticketsModel.get_tickets_with_boardName_and_issueNumber(boardName, epic_issue["issueNumber"])["tickets"][0]
-                array_issues["projectEpicsIssues"].append(ticket)
+        if epic_and_issue is not None:
+            boardName = epic_and_issue[3]
 
-        elif epic_and_issue[1] == 'issue':
-            issueNumber = epic_and_issue[0]
-            ticket = ticketsModel.get_tickets_with_boardName_and_issueNumber(boardName, issueNumber)["tickets"][0]
-            array_issues["projectEpicsIssues"].append(ticket)
+            if epic_and_issue[1] == 'epic':
+                epic_number = epic_and_issue[0]
+                if epicsModel.get_epic(epic_number)["epics"] != []:
+                    all_epics_issues = epicsIssuesModel.get_epic_issues(boardName, epic_number)["epicsIssues"]
+                    epic_name = epicsModel.get_epic(epic_number)["epics"][0]["epicName"]
+                    array_issues["projectEpicsIssues"].append({"epicName": epic_name, "allTickets": []})
+
+                    for epic_issue in all_epics_issues:
+                        if epic_issue is not None:
+                            ticket = ticketsModel.get_tickets_with_boardName_and_issueNumber(boardName, epic_issue["issueNumber"])["tickets"][0]
+                            array_issues["projectEpicsIssues"][-1]["allTickets"].append(ticket)
+
+            elif epic_and_issue[1] == 'issue':
+                issueNumber = epic_and_issue[0]
+                ticket = ticketsModel.get_tickets_with_boardName_and_issueNumber(boardName, issueNumber)["tickets"][0]
+                array_issues["projectEpicsIssues"].append(ticket)
     return array_issues
 
 def get_all_epics_issues_for_project(projectId):

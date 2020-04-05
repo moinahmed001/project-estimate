@@ -21,12 +21,20 @@ def fetch_epics():
 
 def get_epics():
     all_epics = db.select_all_from_table("epics")
+    return loop_all_epics(all_epics)
+
+def loop_all_epics(all_epics):
     array_epics = {'epics':[]}
     for epic in all_epics:
         array_epics["epics"].append({"epicId": epic[0], "epicName": epic[1]})
 
     return array_epics
 
+def get_epic(epicId):
+    query = "SELECT * from epics where epicId=%s LIMIT 1" %(epicId)
+    all_epics = db.with_query(query)
+    return loop_all_epics(all_epics)
+        
 def insert_epics(epic_issue_number, epic_title, board_name):
     query = "INSERT INTO epics (epicId, epicName, boardName) VALUES (?, ?, ?)"
     args = (epic_issue_number, epic_title, board_name)
