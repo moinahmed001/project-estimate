@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template
-import projectsModel, epicsModel, boardsModel
+import projectsModel, epicsModel, boardsModel, projectEpicsAndTicketsModel as peatm
 
 views_routes = Blueprint('views_routes', __name__)
 
@@ -16,9 +16,15 @@ def project():
 def projectEpicsAndTickets(project_id):
     project = None
     epics = None
+    peat = None
     if projectsModel.get_project_with_id(project_id)["projects"] != []:
         project = projectsModel.get_project_with_id(project_id)["projects"][0]
     if epicsModel.get_epics()["epics"] != []:
         epics = epicsModel.get_epics()["epics"]
-    print(project)
-    return render_template("projectEpicsAndTickets.html", project=project, epics=epics)
+        # get all the tickets and issues as one table with all the information
+    if peatm.get_epics_and_issues_with_project_id(project_id)["projectEpicsIssues"] != []:
+        peat = peatm.get_epics_and_issues_with_project_id(project_id)["projectEpicsIssues"]
+    # print(project)
+    # print(epics)
+    print(peat)
+    return render_template("projectEpicsAndTickets.html", project=project, epics=epics, peat=peat)

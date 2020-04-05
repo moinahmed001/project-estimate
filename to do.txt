@@ -5,3 +5,7 @@
 -Reports to be statically stored so it doesnt update
 - Reporting to have history changes
 - If its busy ingesting all to not allow any other pages to work
+- Ingestion status with last time ingested
+- View all projects
+-- View projects that are editable/ mine
+- Remove epic that has been chosen for the project to avoid having duplicate

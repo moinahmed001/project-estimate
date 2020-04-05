@@ -25,6 +25,12 @@ def insert_query(query, args):
     res =  database.commit()
     return res
 
+def update_query(query):
+    database = get_db()
+    database.execute(query)
+    res =  database.commit()
+    return res
+
 def with_query(query):
     database = get_db()
     rv = database.execute(query)

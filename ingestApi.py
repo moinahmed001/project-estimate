@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template
-import epicsModel, issuesModel, projectEpicsAndTicketsModel as peatm, epicsIssuesModel
+import epicsModel, issuesModel, projectEpicsAndTicketsModel as peatm, epicsIssuesModel, ticketsModel
 
 ingest_api_routes = Blueprint('ingest_api_routes', __name__)
 
@@ -26,6 +26,12 @@ def api_ingest_epics():
     return "epics ingestion is complete"
 
 
+@ingest_api_routes.route('/api/ingest/test')
+def api_test():
+    ticket_issue = {"boardName": "ott-web-europe", "issueNumber": 1, "totalComments": 2}
+    ticketsModel.insert_or_update_ticket(ticket_issue)
+    return "do"
+    
 @ingest_api_routes.route('/api/ingest/epicsIssues')
 def api_ingest_epics_issues():
     all_epics = epicsModel.get_epics()
@@ -42,7 +48,10 @@ def api_ingest_epics_issues():
                 issue_status = issuesModel.fetch_issue_status(issue_number)
                 if issue_status is not "epic":
                     issue_details = issuesModel.fetch_issue(issue_number)
-                    issuesModel.insert_issues(issue_number, "ott-web-europe", issue_details['title'], issue_status, issue_details["html_url"])
+                    issuesModel.insert_issues(issue_number, "ott-web-europe", issue_details["title"], issue_status, issue_details["html_url"])
+                    # insert into the tickets too if it doesnt exists otherwise update it
+                    ticket_issue = {"boardName": "ott-web-europe", "issueNumber": issue_number, "totalComments": issue_details["comments"]}
+                    ticketsModel.insert_or_update_ticket(ticket_issue)
     return "epics issues ingestion complete"
 
 @ingest_api_routes.route('/api/ingest/issues')

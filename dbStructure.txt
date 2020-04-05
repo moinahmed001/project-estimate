@@ -28,7 +28,7 @@ CREATE TABLE "boards" (
 );
 
 CREATE TABLE "tickets" (
-	"ticketId"	INTEGER NOT NULL,
+	"ticketId"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
 	"boardName"	TEXT,
 	"issueNumber"	INTEGER,
 	"dependantSystem"	TEXT,
@@ -39,7 +39,7 @@ CREATE TABLE "tickets" (
 	"totalComments"	INTEGER,
 	"notes"	BLOB,
 	"sharedPlatformIssue"	INTEGER
-)
+);
 
 CREATE TABLE "reporting" (
 	"reportingId"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
@@ -78,8 +78,7 @@ CREATE TABLE "projectEpicsAndTickets" (
 	"projectEpicsAndTicketsId"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
 	"projectId"	INTEGER NOT NULL,
 	"id"	INTEGER NOT NULL,
-	"type"	TEXT NOT NULL DEFAULT 'epic',
-	"boardName"	TEXT NOT NULL
+	"type"	TEXT NOT NULL DEFAULT 'epic'
 );
 
 CREATE TABLE "epicsIssues" (

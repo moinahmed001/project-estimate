@@ -11,30 +11,34 @@
                 if (form.checkValidity() === false) {
                     event.stopPropagation();
                 } else {
-                    var url = "/api/epicIssuesFullDetails/" + $('#repoId').val() + "/" + $('#epicId').val()
+                    var url = "/api/epicIssuesFullDetails/" + $('#boardName').val() + "/" + $('#epicId').val()
 
                     $.ajax({
                         type: "GET",
                         url: url,
                         success: function(epicsIssuesDataResponse)
                         {
+                            $('#addIssueButton').show()
+                            $('#epicsModalLabel').text($( "#epicId option:selected" ).text());
                             var tableRow = '<p>The following issues were fetched, does this look correct to you?</p><table class="table table-sm table-hover"><thead><tr><th scope="col">Issue #</th><th scope="col">Description</th></tr></thead><tbody>'
                             if (epicsIssuesDataResponse.epicsIssues.length == 0){
                                 // display the error
                                 tableRow += '<tr><th scope="row">0</th><td>Unfortunately there are no issues assigned to this epic</td></tr>'
+                                tableRow += '</tbody></table>'
+                                $('#addIssueButton').hide()
                             } else {
                                 console.log(epicsIssuesDataResponse)
 
                                  $.each(epicsIssuesDataResponse.epicsIssues, function(key, epicsIssue) {
-                                    console.log(key)
-                                    console.log(epicsIssue)
                                     tableRow += '<tr><th scope="row">'+epicsIssue.issueNumber+'</th><td>'+ epicsIssue.title+'</td></tr>'
                                  });
+                                 tableRow += '</tbody></table>'
+                                 $('#addIssueButton').val($('#epicId').val())
                             }
-                            tableRow += '</tbody></table><button class="btn btn-primary" type="submit" id="add_all_issues" value="'+$('#epicId').val()+'">Add All Issues</button>'
+
 
                             $('#fetchedEpicData').html(tableRow)
-// Make the modal appear
+                            $('#hiddenFetchButton').click()
                         }
                     });
                 }
@@ -44,7 +48,28 @@
         });
     }, false);
 
-// TODO: put tableRow in a modal
+    $('#addIssueButton').click(function(){
+        var epicId = $('#addIssueButton').val()
+        var projectId = $('#projectId').val()
+        var url = "/api/post/projectEpicsAndTickets"
+
+        console.log(epicId)
+        $.ajax({
+            type: "POST",
+            data: {'projectId': projectId, 'type': 'epic', 'id': epicId},
+            url: url,
+            success: function(peatResponse)
+            {
+                console.log(peatResponse)
+                if (peatResponse.redirectUrl != undefined){
+                    window.location.replace(peatResponse.redirectUrl);
+                } else {
+                    // TODO: display the error on the modal 
+                }
+            }
+        });
+    })
+
 // TODO: make a call with POST on button add_all_issues press
 
 })(jQuery);
