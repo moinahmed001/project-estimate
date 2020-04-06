@@ -59,18 +59,15 @@ def api_post_project_epics_and_tickets():
     if request.method == 'POST':
         # validate the form
         if peatm.validate_form(request.form):
-            # check if the project already exists
+            # check if the projectEpicsAndTickets already has this epic in the db
             if peatm.get_epic_and_issue(request.form["projectId"], request.form["id"], request.form["type"])["projectEpicsAndTickets"] == []:
                 peatm.insert_epic_and_issue(request.form)
-                # each epics issues needs to be inserted into the tickets table
-                all_issues = peatm.get_all_epics_issues_for_project(request.form["projectId"])
-                # ticketsModel.insert_ticket(all_issues)
 
                 url_created = 'views_routes.projectEpicsAndTickets'
                 response["redirectUrl"] = url_for(url_created, project_id=request.form["projectId"])
                 response["status"] = "success"
             else:
-                response["message"] = "This project already exists"
+                response["message"] = "This project epic/issue already exists"
         else:
             response["message"] = "failed to validate the form"
             # response["projectData"] = request.form

@@ -88,13 +88,22 @@
                 </div>
             </div>
         </div>
-        <!--  -->
-        <!-- TODO:  Check if the  projectEpicsAndTickets has rows in DB that can be added here-->
-        <!--  -->
+
+        {% if peats|length > 0 %}
+        <div class="row text-left">
+            <div class="col">
+                <h4 class="mt-5 text-center">Epics added to this project</h4>
+
+                <input type="text" autocomplete="off" class="form-control" id="searchInputField" name="searchInputField" placeholder="Quick search for issues from the epics below">
+
+            </div>
+        </div>
+        {% endif %}
         {% for peat in peats %}
         <div class="row text-left">
             <div class="col">
-                <h2 class="mt-5">{{ peat.epicName }}</h2>
+                <h4 class="mt-5">{{ peat.epicName }}</h4>
+
                 <table class="table">
                     <thead>
                         <tr>
@@ -112,7 +121,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for ticket in peat.allTickets %}
+                        {% for ticket in peat.allTickets|sort(attribute='issueStatus') %}
                         <tr>
                             <th scope="row"><a href='{{ ticket.issueLink|default("", true) }}' target="_blank">{{ticket.issueNumber|default("", true)}}</a></th>
                             <td>{{ticket.title|default("", true)}}</td>
@@ -126,99 +135,99 @@
                             <td>{{ticket.notes|default("", true)}}</td>
                             <td>{{ticket.sharedPlatformIssue|default("", true)}}</td>
                         </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
-            {% endfor %}
-
-            <!-- The form starts -->
-            <form class="needs-validation" id="projectEpicsForm" novalidate>
-
-                <div class="form-row">
-                    <div class="col-md-8 mb-3">
-                        <label for="epicId">Choose an Epic to fetch its issues</label>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="inputGroupPrepend">E</span>
-                            </div>
-                            <select class="custom-select" id="epicId" name="epicId" required>
-                                <option value="" selected>Select Epics</option>
-                                {% for epic in epics|sort(attribute='epicName') %}
-                                <option value='{{ epic.epicId|default("", true) }}'>{{ epic.epicName|default("", true) }}</option>
-                                {% endfor %}
-                            </select>
-                            <div class="invalid-feedback">
-                                Please choose an epic you would like to fetch its issue for this project
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-2 mb-3"></div>
-                    <div class="col-md-2 mb-3">
-                        <label>&nbsp;</label>
-                        <div class="input-group">
-                            <!-- Button trigger modal -->
-                            <button type="button" class="btn btn-primary d-none" data-toggle="modal" data-target=".bd-example-modal-lg" id="hiddenFetchButton">
-                                hidden modal button
-                            </button>
-                            <button class="btn btn-primary" type="submit">Fetch </button>
-                        </div>
-                    </div>
-                </div>
-            </form>
-            <form class="needs-validation" id="projectIssueForm" novalidate>
-
-                <div class="form-row">
-                    <div class="col-md-8 mb-3">
-                        <label for="issue">Add any issue that is not part of an epic</label>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="inputGroupPrepend">I</span>
-                            </div>
-                            <input type="text" class="form-control" autocomplete="off" id="issue" name="issue" placeholder="Issue Number" required>
-                            <div class="invalid-feedback">
-                                A specific issue number is required and it must be from the {{ project.boardName|default("", true) }} board
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-2 mb-3"></div>
-                    <div class="col-md-2 mb-3">
-                        <label>&nbsp;</label>
-                        <div class="input-group">
-                            <button class="btn btn-primary" type="submit">Add </button>
-                        </div>
-                    </div>
-                </div>
-            </form>
-
-
-            <!-- Modal -->
-            <div class="modal fade bd-example-modal-lg" id="epicsIssuesModal" tabindex="-1" role="dialog" aria-labelledby="epicsModalLabel" aria-hidden="true">
-
-                <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="epicsModalLabel">Modal title</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body text-left" id="fetchedEpicData">
-                            ...
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                            <button type="button" class="btn btn-primary" id="addIssueButton">Add issues to project</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% endif %}
         </div>
-    </div>
-    {% endblock %}
+        {% endfor %}
 
-    {% block script %}
-    <script src="{{ url_for('static', filename='js/projectEpicsAndTicketsForm.js') }}"></script>
-    {% endblock %}
+        <!-- The form starts -->
+        <form class="needs-validation" id="projectEpicsForm" novalidate>
+
+            <div class="form-row">
+                <div class="col-md-8 mb-3">
+                    <label for="epicId">Choose an Epic to fetch its issues</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroupPrepend">E</span>
+                        </div>
+                        <select class="custom-select" id="epicId" name="epicId" required>
+                            <option value="" selected>Select Epics</option>
+                            {% for epic in epics|sort(attribute='epicName') %}
+                            <option value='{{ epic.epicId|default("", true) }}'>{{ epic.epicName|default("", true) }}</option>
+                            {% endfor %}
+                        </select>
+                        <div class="invalid-feedback">
+                            Please choose an epic you would like to fetch its issue for this project
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 mb-3"></div>
+                <div class="col-md-2 mb-3">
+                    <label>&nbsp;</label>
+                    <div class="input-group">
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-primary d-none" data-toggle="modal" data-target=".bd-example-modal-lg" id="hiddenFetchButton">
+                            hidden modal button
+                        </button>
+                        <button class="btn btn-primary" type="submit">Fetch </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <form class="needs-validation" id="projectIssueForm" novalidate>
+
+            <div class="form-row">
+                <div class="col-md-8 mb-3">
+                    <label for="issue">Add any issue that is not part of an epic</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroupPrepend">I</span>
+                        </div>
+                        <input type="text" class="form-control" autocomplete="off" id="issue" name="issue" placeholder="Issue Number" required>
+                        <div class="invalid-feedback">
+                            A specific issue number is required and it must be from the {{ project.boardName|default("", true) }} board
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 mb-3"></div>
+                <div class="col-md-2 mb-3">
+                    <label>&nbsp;</label>
+                    <div class="input-group">
+                        <button class="btn btn-primary" type="submit">Add </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+
+        <!-- Modal -->
+        <div class="modal fade bd-example-modal-lg" id="epicsIssuesModal" tabindex="-1" role="dialog" aria-labelledby="epicsModalLabel" aria-hidden="true">
+
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="epicsModalLabel">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body text-left" id="fetchedEpicData">
+                        ...
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" id="addIssueButton">Add issues to project</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="{{ url_for('static', filename='js/projectEpicsAndTicketsForm.js') }}"></script>
+{% endblock %}

@@ -10,3 +10,5 @@
 -- View projects that are editable/ mine
 - Remove epic that has been chosen for the project to avoid having duplicate
 - option to remove epics from the board too
+- projectEpicsAndTickets.html table needs to fixed to 2 lines with ... to expand
+-- add form to handle updates

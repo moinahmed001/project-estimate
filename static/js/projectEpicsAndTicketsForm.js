@@ -64,12 +64,17 @@
                 if (peatResponse.redirectUrl != undefined){
                     window.location.replace(peatResponse.redirectUrl);
                 } else {
-                    // TODO: display the error on the modal 
+                    // TODO: display the error on the modal
                 }
             }
         });
     })
 
-// TODO: make a call with POST on button add_all_issues press
+    $("#searchInputField").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $(".table tr").filter(function() {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
 
 })(jQuery);
