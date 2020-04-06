@@ -94,10 +94,9 @@
         var projectId = $('#projectId').val()
         var url = "/api/post/projectEpicsAndTickets"
 
-        console.log(epicId)
         $.ajax({
             type: "POST",
-            data: {'projectId': projectId, 'type': $('#dataType').val(), 'id': epicId},
+            data: {'projectId': projectId, 'type': $('#dataType').val(), 'id': epicId, 'boardName': $('#boardName').val()},
             url: url,
             success: function(peatResponse)
             {
