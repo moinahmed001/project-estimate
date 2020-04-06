@@ -1,28 +1,34 @@
 from flask import Blueprint, render_template
-import epicsModel, issuesModel, projectEpicsAndTicketsModel as peatm, epicsIssuesModel, ticketsModel
+import epicsModel, issuesModel, projectEpicsAndTicketsModel as peatm, epicsIssuesModel, ticketsModel, boardsModel
 
 ingest_api_routes = Blueprint('ingest_api_routes', __name__)
 
 
 @ingest_api_routes.route('/api/ingest/all')
 def api_ingest_all():
-    api_ingest_epics()
-    api_ingest_epics_issues()
-    api_ingest_issues()
+    all_boards = boardsModel.get_boards()["boards"]
+    for board in all_boards:
+        print("Ingesting for board: %s" %(board["boardName"]))
+        api_ingest_epics(board["boardName"])
+        print("Finished ingesting epics")
+        api_ingest_epics_issues(board["boardName"])
+        print("Finished ingesting issues that belongs to the epics")
+        api_ingest_issues(board["boardName"])
+        print("Finished ingesting issues that does not belong to the epics")
     return "done!"
 
-@ingest_api_routes.route('/api/ingest/epics')
-def api_ingest_epics():
+@ingest_api_routes.route('/api/ingest/epics/<board_name>')
+def api_ingest_epics(board_name):
     all_epics = epicsModel.fetch_epics()
     epic_issues = all_epics['epic_issues']
 
-    epicsModel.delete_all_epics_for_board()
+    epicsModel.delete_all_epics_for_board(board_name)
 
     for epic_issue in epic_issues:
         epic_issue_number = epic_issue['issue_number']
-        epic_issue_details = issuesModel.fetch_issue(epic_issue_number)
+        epic_issue_details = issuesModel.fetch_issue(epic_issue_number, board_name)
         if epic_issue_details["state"] != "closed":
-            epicsModel.insert_epics(epic_issue_number, epic_issue_details['title'], "ott-web-europe")
+            epicsModel.insert_epics(epic_issue_number, epic_issue_details['title'], board_name)
 
     return "epics ingestion is complete"
 
@@ -33,11 +39,11 @@ def api_test():
     ticketsModel.insert_or_update_ticket_comment_count(ticket_issue)
     return "do"
 
-@ingest_api_routes.route('/api/ingest/epicsIssues')
-def api_ingest_epics_issues():
+@ingest_api_routes.route('/api/ingest/epicsIssues/<board_name>')
+def api_ingest_epics_issues(board_name):
     all_epics = epicsModel.get_epics()
-    epicsIssuesModel.delete_all_epics_issues_for_board()
-    issuesModel.delete_all_issues_for_board()
+    epicsIssuesModel.delete_all_epics_issues_for_board(board_name)
+    issuesModel.delete_all_issues_for_board(board_name)
 
     for epic in all_epics["epics"]:
         epic_issues = epicsIssuesModel.fetch_epic_issues(epic["epicId"])
@@ -45,30 +51,30 @@ def api_ingest_epics_issues():
             issue_number = issue["issue_number"]
             issue_status = issuesModel.fetch_issue_status(issue_number)
             if issue_status is not "epic":
-                epicsIssuesModel.insert_epics_issues(epic["epicId"], issue_number, "ott-web-europe")
-                issue_does_not_exists = issuesModel.check_issue_exists(issue_number, "ott-web-europe")
+                epicsIssuesModel.insert_epics_issues(epic["epicId"], issue_number, board_name)
+                issue_does_not_exists = issuesModel.check_issue_exists(issue_number, board_name)
                 if issue_does_not_exists:
-                    issue_details = issuesModel.fetch_issue(issue_number)
-                    issuesModel.insert_issues(issue_number, "ott-web-europe", issue_details["title"], issue_status, issue_details["html_url"])
+                    issue_details = issuesModel.fetch_issue(issue_number, board_name)
+                    issuesModel.insert_issues(issue_number, board_name, issue_details["title"], issue_status, issue_details["html_url"])
                     # insert into the tickets too if it doesnt exists otherwise update it
-                    ticket_issue = {"boardName": "ott-web-europe", "issueNumber": issue_number, "totalComments": issue_details["comments"]}
+                    ticket_issue = {"boardName": board_name, "issueNumber": issue_number, "totalComments": issue_details["comments"]}
                     ticketsModel.insert_or_update_ticket_comment_count(ticket_issue)
     return "epics issues ingestion complete"
 
-@ingest_api_routes.route('/api/ingest/issues')
-def api_ingest_issues():
+@ingest_api_routes.route('/api/ingest/issues/<board_name>')
+def api_ingest_issues(board_name):
     # this is to ingest those individual issues and are not part of an epic
     # It can be found in the projectEpicsAndTickets table where type issue
-    all_issues = peatm.get_all_issues_from_project("ott-web-europe")
+    all_issues = peatm.get_all_issues_from_project(board_name)
     for issue in all_issues:
         issue_number = issue[2]
-        issue_does_not_exists = issuesModel.check_issue_exists(issue_number, "ott-web-europe")
+        issue_does_not_exists = issuesModel.check_issue_exists(issue_number, board_name)
         if issue_does_not_exists:
             issue_status = issuesModel.fetch_issue_status(issue_number)
 
             if issue_status is not "epic":
-                issue_details = issuesModel.fetch_issue(issue_number)
-                issuesModel.insert_issues(issue_number, "ott-web-europe", issue_details['title'], issue_status, issue_details["html_url"])
+                issue_details = issuesModel.fetch_issue(issue_number, board_name)
+                issuesModel.insert_issues(issue_number, board_name, issue_details['title'], issue_status, issue_details["html_url"])
 
     return 'ingested issues without Epic individually'
     # VUK010960

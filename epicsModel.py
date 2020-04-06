@@ -34,12 +34,12 @@ def get_epic(epicId):
     query = "SELECT * from epics where epicId=%s LIMIT 1" %(epicId)
     all_epics = db.with_query(query)
     return loop_all_epics(all_epics)
-        
+
 def insert_epics(epic_issue_number, epic_title, board_name):
     query = "INSERT INTO epics (epicId, epicName, boardName) VALUES (?, ?, ?)"
     args = (epic_issue_number, epic_title, board_name)
     return db.insert_query(query, args)
 
-def delete_all_epics_for_board():
-    delete_epics_query = "DELETE FROM epics where boardName = '%s'" %(app.config['REPOS'])
+def delete_all_epics_for_board(board_name):
+    delete_epics_query = "DELETE FROM epics where boardName = '%s'" %(board_name)
     db.with_query(delete_epics_query)

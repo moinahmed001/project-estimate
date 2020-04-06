@@ -5,11 +5,11 @@ from flask import Flask
 app = Flask(__name__)
 app.config.from_pyfile('config.cfg')
 
-def fetch_issue(issue_number):
+def fetch_issue(issue_number, board_name):
     github_root_url = app.config['GITHUB_ROOT_URL']
     issue_url = app.config['GITHUB_ISSUE_URL']
     issue_url = issue_url.replace("{github_organisation_name}", app.config['GITHUB_ORGANISATION_NAME'])
-    issue_url = issue_url.replace("{repos}", app.config['REPOS'])
+    issue_url = issue_url.replace("{repos}", board_name)
     issue_url = issue_url.replace("{issue_number}", str(issue_number))
 
     headers = {'Accept': app.config['GITHUB_ACCEPT_HEADER'], 'Authorization': app.config['GITHUB_AUTH_TOKEN']}
@@ -89,6 +89,6 @@ def insert_issues(issue_number, board_name, title, issue_status, issue_link):
     args = (issue_number, board_name, title, issue_status, issue_link)
     return db.insert_query(query, args)
 
-def delete_all_issues_for_board():
-    delete_issues_query = "DELETE FROM issues where boardName = '%s'" %(app.config['REPOS'])
+def delete_all_issues_for_board(board_name):
+    delete_issues_query = "DELETE FROM issues where boardName = '%s'" %(board_name)
     db.with_query(delete_issues_query)

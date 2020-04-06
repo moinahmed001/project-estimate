@@ -62,6 +62,6 @@ def insert_epics_issues(epic_id, issue_number, board_name):
     args = (epic_id, issue_number, board_name)
     return db.insert_query(query, args)
 
-def delete_all_epics_issues_for_board():
-    delete_epicsIssues_query = "DELETE FROM epicsIssues where boardName = '%s'" %(app.config['REPOS'])
+def delete_all_epics_issues_for_board(board_name):
+    delete_epicsIssues_query = "DELETE FROM epicsIssues where boardName = '%s'" %(board_name)
     return db.with_query(delete_epicsIssues_query)
