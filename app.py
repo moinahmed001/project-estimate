@@ -128,18 +128,31 @@ def api_epics_issues_removed():
 def api_issue(board_name, issue_number):
     return issuesModel.get_issue(board_name, issue_number)
 
+@app.route('/api/post/ticket/<board_name>/<issue_number>', methods=['POST'])
+def api_post_ticket(board_name, issue_number):
+    if request.method == 'POST':
+        issue_details = issuesModel.fetch_issue_from_github(board_name, issue_number)
+        add_update_ticket(board_name, issue_number, issue_details)
+        return "added/updated ticket"
+
+def add_update_ticket(board_name, issue_number, issue_details):
+    ticket_issue = {"boardName": board_name, "issueNumber": issue_number, "totalComments": issue_details["comments"]}
+    ticketsModel.insert_or_update_ticket(ticket_issue)
+
 # this fetches and inserts individual issue
+# it will also insert/update ticket
 @app.route('/api/github/issue/<board_name>/<issue_number>')
 def api_github_issue(board_name, issue_number):
+    issue_details = issuesModel.fetch_issue_from_github(board_name, issue_number)
+    add_update_ticket(board_name, issue_number, issue_details)
+
     if api_issue(board_name, issue_number)["issues"] == []:
         issue_does_not_exists = issuesModel.check_issue_exists(issue_number, board_name)
         if issue_does_not_exists:
             issue_status = issuesModel.fetch_issue_status(issue_number)
             if issue_status is not "epic":
-                issue_details = issuesModel.get_issue_from_github(board_name, issue_number)
                 issuesModel.insert_issues(issue_number, board_name, issue_details['title'], issue_status, issue_details["html_url"])
-                ticket_issue = {"boardName": board_name, "issueNumber": issue_number, "totalComments": issue_details["comments"]}
-                ticketsModel.insert_or_update_ticket(ticket_issue)
+
     return api_issue(board_name, issue_number)
 
 @app.route('/api/epicsIssues/<board_name>/<epic_number>')

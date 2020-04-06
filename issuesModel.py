@@ -21,7 +21,7 @@ def fetch_issue(issue_number):
     return data
 
 
-def get_issue_from_github(board_name, issue_number):
+def fetch_issue_from_github(board_name, issue_number):
     github_root_url = app.config['GITHUB_ROOT_URL']
     issue_url = app.config['GITHUB_ISSUE_URL']
     issue_url = issue_url.replace("{github_organisation_name}", app.config['GITHUB_ORGANISATION_NAME'])

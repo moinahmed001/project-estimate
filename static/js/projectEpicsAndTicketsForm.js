@@ -87,8 +87,6 @@
 
             form.classList.add('was-validated');
         }, false);
-
-
     }
 
     $('#addIssueButton').click(function(){
@@ -120,4 +118,25 @@
         });
       });
 
+
+    $('#updateTicketModal').on('shown.bs.modal', function(e){
+        console.log("openned!")
+        var ticketId = $(e.relatedTarget).data('ticketid');
+        var issueNumber = $(e.relatedTarget).data('issuenumber');
+        var title = $(e.relatedTarget).data('title');
+        var dependantSystem = $(e.relatedTarget).data('dependantsystem');
+        var dependantReason = $(e.relatedTarget).data('dependantreason');
+        var devEstimateInDays = $(e.relatedTarget).data('devestimateindays');
+        var qaEstimateInDays = $(e.relatedTarget).data('qaestimateIndays');
+        var issueStatus = $(e.relatedTarget).data('issuestatus');
+        var proposedReleaseDropTo = $(e.relatedTarget).data('proposedreleasedropto');
+        var totalComments = $(e.relatedTarget).data('totalcomments');
+        var notes = $(e.relatedTarget).data('notes');
+        var sharedPlatformIssue = $(e.relatedTarget).data('sharedplatformissue');
+
+        $('#updateTicketModalLabel').text(issueNumber + ': ' + title)
+
+        // update ticket
+        $('#fetchedUpdateTicket').html(ticketId)
+    });
 })(jQuery);
