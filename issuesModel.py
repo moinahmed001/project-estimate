@@ -20,6 +20,24 @@ def fetch_issue(issue_number):
     data = r.json()
     return data
 
+
+def get_issue_from_github(board_name, issue_number):
+    github_root_url = app.config['GITHUB_ROOT_URL']
+    issue_url = app.config['GITHUB_ISSUE_URL']
+    issue_url = issue_url.replace("{github_organisation_name}", app.config['GITHUB_ORGANISATION_NAME'])
+    issue_url = issue_url.replace("{repos}", board_name)
+    issue_url = issue_url.replace("{issue_number}", str(issue_number))
+
+    headers = {'Accept': app.config['GITHUB_ACCEPT_HEADER'], 'Authorization': app.config['GITHUB_AUTH_TOKEN']}
+    url = github_root_url + issue_url
+
+    r = requests.get(url, headers=headers)
+
+    data = r.json()
+    return data
+
+
+
 def check_issue_exists(issue_number, board_name):
     query = "SELECT * from issues where issueNumber=%s AND boardName='%s'" %(issue_number, board_name)
     all_issues = db.with_query(query)
@@ -37,10 +55,11 @@ def fetch_issue_status(issue_number):
     r = requests.get(url, headers=headers)
 
     data = r.json()
-    if data["is_epic"] is False:
-        if "pipeline" in data:
-            return data["pipeline"]["name"]
-        return "Closed"
+    if "is_epic" in data:
+        if data["is_epic"] is False:
+            if "pipeline" in data:
+                return data["pipeline"]["name"]
+            return "Closed"
     return "epic"
 
 def get_issue(board_name, issue_number):

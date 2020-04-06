@@ -24,6 +24,8 @@ def get_epics_and_issues_with_project_id(projectId):
     project_epics_and_issues = db.with_query(query)
 
     array_issues = {'projectEpicsIssues':[]}
+    array_issues["projectEpicsIssues"].append({"epicName": "Non-Epic Issues", "allTickets": []})
+
     for epic_and_issue in project_epics_and_issues:
         if epic_and_issue is not None:
             boardName = epic_and_issue[3]
@@ -41,12 +43,14 @@ def get_epics_and_issues_with_project_id(projectId):
                             array_issues["projectEpicsIssues"][-1]["allTickets"].append(ticket)
 
             elif epic_and_issue[1] == 'issue':
-                print(">>>>> issue type: SHouldnt be here!")
-                print(epic_and_issue)
-                # TODO: test this path!
                 issueNumber = epic_and_issue[0]
                 ticket = ticketsModel.get_tickets_with_boardName_and_issueNumber(boardName, issueNumber)
-                # array_issues["projectEpicsIssues"].append(ticket)
+
+                for issue in array_issues["projectEpicsIssues"]:
+                    if "epicName" in issue:
+                        if issue["epicName"] == "Non-Epic Issues":
+                            issue["allTickets"].append(ticket)
+
     return array_issues
 
 def get_all_epics_issues_for_project(projectId):

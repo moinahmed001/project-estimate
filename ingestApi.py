@@ -62,10 +62,13 @@ def api_ingest_issues():
     all_issues = peatm.get_all_issues_from_project("ott-web-europe")
     for issue in all_issues:
         issue_number = issue[2]
-        issue_status = issuesModel.fetch_issue_status(issue_number)
-        if issue_status is not "epic":
-            issue_details = issuesModel.fetch_issue(issue_number)
-            issuesModel.insert_issues(issue_number, "ott-web-europe", issue_details['title'], issue_status, issue_details["html_url"])
+        issue_does_not_exists = issuesModel.check_issue_exists(issue_number, "ott-web-europe")
+        if issue_does_not_exists:
+            issue_status = issuesModel.fetch_issue_status(issue_number)
+
+            if issue_status is not "epic":
+                issue_details = issuesModel.fetch_issue(issue_number)
+                issuesModel.insert_issues(issue_number, "ott-web-europe", issue_details['title'], issue_status, issue_details["html_url"])
 
     return 'ingested issues without Epic individually'
     # VUK010960
