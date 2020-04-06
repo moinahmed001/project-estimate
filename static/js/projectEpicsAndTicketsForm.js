@@ -47,7 +47,7 @@
                             $('#dataType').val('issue')
                             $('#epicsModalLabel').text("Confirm issue");
                         }
-                        var tableRow = '<p>The following issues were fetched, does this look correct to you?</p><table class="table table-sm table-hover"><thead><tr><th scope="col">Issue #</th><th scope="col">Description</th></tr></thead><tbody>'
+                        var tableRow = '<div id="errorMessage"></div><p>The following issues were fetched, does this look correct to you?</p><table class="table table-sm table-hover"><thead><tr><th scope="col">Issue #</th><th scope="col">Description</th></tr></thead><tbody>'
 
                         if(idType == "epic"){
                             var issue = epicsIssuesDataResponse.epicsIssues
@@ -106,8 +106,8 @@
                 console.log(peatResponse)
                 if (peatResponse.redirectUrl != undefined){
                     window.location.replace(peatResponse.redirectUrl);
-                } else {
-                    // TODO: display the error on the modal
+                } else if (peatResponse.message != undefined) {
+                    $('#errorMessage').html('<div class="alert alert-danger">'+peatResponse.message+'</div>')
                 }
             }
         });

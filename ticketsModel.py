@@ -10,7 +10,7 @@ def get_tickets():
     return loop_all_tickets(all_tickets)
 
 def get_tickets_with_boardName_and_issueNumber(boardName, issueNumber):
-    query = "SELECT t.issueNumber, i.issueLink, i.title, t.dependantSystem, t.dependantReason, t.devEstimateInDays, t.qaEstimateInDays, i.issueStatus, t.proposedReleaseDropTo, t.totalComments, t.notes, t.sharedPlatformIssue from tickets as t JOIN issues as i on t.issueNumber=i.issueNumber AND t.boardName=i.boardName where t.issueNumber=%s AND t.boardName='%s' LIMIT 1" %(issueNumber, boardName)
+    query = "SELECT t.issueNumber, i.issueLink, i.title, t.dependantSystem, t.dependantReason, t.devEstimateInDays, t.qaEstimateInDays, i.issueStatus, t.proposedReleaseDropTo, t.totalComments, t.notes, t.sharedPlatformIssue, t.ticketId from tickets as t JOIN issues as i on t.issueNumber=i.issueNumber AND t.boardName=i.boardName where t.issueNumber=%s AND t.boardName='%s' LIMIT 1" %(issueNumber, boardName)
     ticket = db.with_query(query)
     array_ticket = {}
     if ticket != []:
@@ -26,7 +26,8 @@ def get_tickets_with_boardName_and_issueNumber(boardName, issueNumber):
             "proposedReleaseDropTo": ticket[0][8],
             "totalComments": ticket[0][9],
             "notes": ticket[0][10],
-            "sharedPlatformIssue": ticket[0][11]
+            "sharedPlatformIssue": ticket[0][11],
+            "ticketId": ticket[0][12]
         }
 
     return array_ticket
