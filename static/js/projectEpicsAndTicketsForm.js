@@ -127,16 +127,90 @@
         var dependantSystem = $(e.relatedTarget).data('dependantsystem');
         var dependantReason = $(e.relatedTarget).data('dependantreason');
         var devEstimateInDays = $(e.relatedTarget).data('devestimateindays');
-        var qaEstimateInDays = $(e.relatedTarget).data('qaestimateIndays');
+        var qaEstimateInDays = $(e.relatedTarget).data('qaestimateindays');
         var issueStatus = $(e.relatedTarget).data('issuestatus');
         var proposedReleaseDropTo = $(e.relatedTarget).data('proposedreleasedropto');
         var totalComments = $(e.relatedTarget).data('totalcomments');
         var notes = $(e.relatedTarget).data('notes');
         var sharedPlatformIssue = $(e.relatedTarget).data('sharedplatformissue');
 
-        $('#updateTicketModalLabel').text(issueNumber + ': ' + title)
+        $('#updateTicketModalLabel').text()
+
+        var form=`
+        <div class="modal-header">
+            <h5 class="modal-title" id="updateTicketModalLabel">${issueNumber}: ${title}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <form class="form-horizontal" id="ticketForm" method="post" action="/api/post/ticket/${$('#boardName').val()}/${issueNumber}">
+            <div class="modal-body text-left">
+                <div class="row">
+                    <div class="input-group col-sm-12">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Dependant system</span>
+                        </div>
+                        <input type="text" value="${dependantSystem}" class="form-control" autocomplete="off" name="dependantSystem" placeholder="Dependant system">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-group col-sm-12">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Dependant reason</span>
+                        </div>
+                        <input type="text" value="${dependantReason}" class="form-control" autocomplete="off" name="dependantReason" placeholder="Dependant reason">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-group col-sm-12">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Developer estimate in days</span>
+                        </div>
+                        <input type="text" value="${devEstimateInDays}" class="form-control" autocomplete="off" name="devEstimateInDays" placeholder="Developer estimate in days">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-group col-sm-12">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">QA estimate in days</span>
+                        </div>
+                        <input type="text" value="${qaEstimateInDays}" class="form-control" autocomplete="off" name="qaEstimateInDays" placeholder="QA estimate in days">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-group col-sm-12">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Scope / proposed released to version</span>
+                        </div>
+                        <input type="text" value="${proposedReleaseDropTo}" class="form-control" autocomplete="off" name="proposedReleaseDropTo" placeholder="Scope / proposed released to version">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-group col-sm-12">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Notes</span>
+                        </div>
+                        <input type="text" value="${notes}" class="form-control" autocomplete="off" name="notes" placeholder="Notes">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-group col-sm-12">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Shared platform issue?</span>
+                        </div>
+                        <input type="text" value="${sharedPlatformIssue}" class="form-control" autocomplete="off" name="sharedPlatformIssue" placeholder="Shared platform issue?">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <input type="hidden" name="projectId" value="${$('#projectId').val()}">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-primary" type="submit">Update</button>
+            </div>
+        </form>
+        `;
 
         // update ticket
-        $('#fetchedUpdateTicket').html(ticketId)
+        $('#fetchedUpdateTicket').html(form);
     });
 })(jQuery);

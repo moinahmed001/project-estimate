@@ -30,7 +30,7 @@ def api_ingest_epics():
 @ingest_api_routes.route('/api/ingest/test')
 def api_test():
     ticket_issue = {"boardName": "ott-web-europe", "issueNumber": 1, "totalComments": 2}
-    ticketsModel.insert_or_update_ticket(ticket_issue)
+    ticketsModel.insert_or_update_ticket_comment_count(ticket_issue)
     return "do"
 
 @ingest_api_routes.route('/api/ingest/epicsIssues')
@@ -52,7 +52,7 @@ def api_ingest_epics_issues():
                     issuesModel.insert_issues(issue_number, "ott-web-europe", issue_details["title"], issue_status, issue_details["html_url"])
                     # insert into the tickets too if it doesnt exists otherwise update it
                     ticket_issue = {"boardName": "ott-web-europe", "issueNumber": issue_number, "totalComments": issue_details["comments"]}
-                    ticketsModel.insert_or_update_ticket(ticket_issue)
+                    ticketsModel.insert_or_update_ticket_comment_count(ticket_issue)
     return "epics issues ingestion complete"
 
 @ingest_api_routes.route('/api/ingest/issues')

@@ -132,19 +132,25 @@ def api_issue(board_name, issue_number):
 def api_post_ticket(board_name, issue_number):
     if request.method == 'POST':
         issue_details = issuesModel.fetch_issue_from_github(board_name, issue_number)
-        add_update_ticket(board_name, issue_number, issue_details)
-        return "added/updated ticket"
-
-def add_update_ticket(board_name, issue_number, issue_details):
-    ticket_issue = {"boardName": board_name, "issueNumber": issue_number, "totalComments": issue_details["comments"]}
-    ticketsModel.insert_or_update_ticket(ticket_issue)
+        ticket_issue = {"boardName": board_name, "issueNumber": issue_number, "totalComments": issue_details["comments"],
+        "dependantSystem": request.form["dependantSystem"],
+        "dependantReason": request.form["dependantReason"],
+        "devEstimateInDays": request.form["devEstimateInDays"],
+        "qaEstimateInDays": request.form["qaEstimateInDays"],
+        "proposedReleaseDropTo": request.form["proposedReleaseDropTo"],
+        "notes": request.form["notes"],
+        "sharedPlatformIssue": request.form["sharedPlatformIssue"]
+        }
+        ticketsModel.insert_or_update_ticket(ticket_issue)
+        return redirect(url_for('views_routes.projectEpicsAndTickets', project_id=request.form["projectId"]))
 
 # this fetches and inserts individual issue
 # it will also insert/update ticket
 @app.route('/api/github/issue/<board_name>/<issue_number>')
 def api_github_issue(board_name, issue_number):
     issue_details = issuesModel.fetch_issue_from_github(board_name, issue_number)
-    add_update_ticket(board_name, issue_number, issue_details)
+    ticket_issue = {"boardName": board_name, "issueNumber": issue_number, "totalComments": issue_details["comments"]}
+    ticketsModel.insert_or_update_ticket_comment_count(ticket_issue)
 
     if api_issue(board_name, issue_number)["issues"] == []:
         issue_does_not_exists = issuesModel.check_issue_exists(issue_number, board_name)

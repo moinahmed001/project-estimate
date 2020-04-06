@@ -12,7 +12,7 @@ def project():
     # check if session has error and then display it with the form data
     return render_template("project.html", boards=boards)
 
-@views_routes.route('/projectEpicsAndTickets/<int:project_id>')
+@views_routes.route('/projectEpicsAndTickets/<project_id>')
 def projectEpicsAndTickets(project_id):
     project = None
     epics = None

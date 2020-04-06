@@ -38,8 +38,8 @@ CREATE TABLE "tickets" (
 	"proposedReleaseDropTo"	TEXT,
 	"totalComments"	INTEGER,
 	"notes"	BLOB,
-	"sharedPlatformIssue"	INTEGER
-);
+	"sharedPlatformIssue"	TEXT
+)
 
 CREATE TABLE "reporting" (
 	"reportingId"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,

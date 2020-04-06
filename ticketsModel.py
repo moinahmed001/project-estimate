@@ -52,6 +52,25 @@ def loop_all_tickets(all_tickets):
     return array_tickets
 
 def insert_or_update_ticket(data):
+
+    if all (k in data for k in ("boardName", "issueNumber")):
+        query = "SELECT totalComments from tickets where issueNumber=%s AND boardName='%s' LIMIT 1" %(data["issueNumber"], data["boardName"])
+        ticket = db.with_query(query)
+        if ticket != []:
+            # update the table
+            q = "UPDATE tickets SET dependantSystem=?, dependantReason=?, devEstimateInDays=?, qaEstimateInDays=?, proposedReleaseDropTo=?, totalComments=?, notes=?, sharedPlatformIssue=? WHERE issueNumber=? AND boardName=?"
+            args = (check_field_and_get_value(data, "dependantSystem"), check_field_and_get_value(data, "dependantReason"), check_field_and_get_value(data, "devEstimateInDays"), check_field_and_get_value(data, "qaEstimateInDays"), check_field_and_get_value(data, "proposedReleaseDropTo"), check_field_and_get_value(data, "totalComments"), check_field_and_get_value(data, "notes"), check_field_and_get_value(data, "sharedPlatformIssue"), data["issueNumber"], data["boardName"])
+
+            db.insert_query(q, args)
+        else:
+            # add it to the db
+            query = "INSERT INTO tickets (boardName, issueNumber, dependantSystem, dependantReason, devEstimateInDays, qaEstimateInDays, proposedReleaseDropTo, totalComments, notes, sharedPlatformIssue) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+            args = (check_field_and_get_value(data, "boardName"), check_field_and_get_value(data, "issueNumber"), check_field_and_get_value(data, "dependantSystem"), check_field_and_get_value(data, "dependantReason"), check_field_and_get_value(data, "devEstimateInDays"), check_field_and_get_value(data, "qaEstimateInDays"), check_field_and_get_value(data, "proposedReleaseDropTo"), check_field_and_get_value(data, "totalComments"), check_field_and_get_value(data, "notes"), check_field_and_get_value(data, "sharedPlatformIssue"))
+            return db.insert_query(query, args)
+
+    return "Error: Need the boardName and issueNumber to proceed"
+
+def insert_or_update_ticket_comment_count(data):
     if all (k in data for k in ("boardName", "issueNumber")):
         query = "SELECT totalComments from tickets where issueNumber=%s AND boardName='%s' LIMIT 1" %(data["issueNumber"], data["boardName"])
         ticket = db.with_query(query)
