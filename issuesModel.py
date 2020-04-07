@@ -74,14 +74,6 @@ def fetch_issue_status(issue_number, repoId):
             return "Closed"
     return "epic"
 
-def issue_status(data):
-    if "is_epic" in data:
-        if data["is_epic"] is False:
-            if "pipeline" in data:
-                return data["pipeline"]["name"]
-            return "Closed"
-    return "epic"
-
 def get_issue(board_name, issue_number):
     query = "SELECT * from issues where issueNumber=%s AND boardName='%s' LIMIT 1" %(issue_number, board_name)
     issue = db.with_query(query)

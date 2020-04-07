@@ -5,8 +5,8 @@
 <div class="row">
     <div class="col-lg-12 text-center">
         {% if project %}
-        <h1 class="mt-5">Project Estimation Page</h1>
-
+        <h3 class="mt-5 text-left">Project Estimation Page</h3>
+        <hr>
         <div class="form-row">
             <div class="col-md-4 mb-3">
                 <label for="projectName">Project name</label>
@@ -88,64 +88,13 @@
                 </div>
             </div>
         </div>
-
-        {% if peats|length > 0 %}
+        <hr>
         <div class="row text-left">
             <div class="col">
-                <input type="text" autocomplete="off" class="form-control" id="searchInputField" name="searchInputField" placeholder="Quick search for issues from the epics below">
-                <h4 class="mt-5 text-center">Epics added to this project</h4>
+                <h3 class="mt-5">Epics and Issues for this project: {{ project.projectName|default("", true) }}</h3>
             </div>
         </div>
-        {% endif %}
-        {% for peat in peats %}
-        {% if peat.allTickets|length > 0 %}
-        <div class="row text-left">
-            <div class="col">
-                <h4 class="mt-5">{{ peat.epicName }}</h4>
-
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Issue #</th>
-                            <th scope="col">Title</th>
-                            <th scope="col">Dependant system</th>
-                            <th scope="col">Dependant reason</th>
-                            <th scope="col">Dev est in days</th>
-                            <th scope="col">QA est in days</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Scope / Releasing to</th>
-                            <th scope="col">Total comments</th>
-                            <th scope="col">Notes</th>
-                            <th scope="col">Shared platform Issue?</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for ticket in peat.allTickets %}
-                        <tr>
-                            <th scope="row" class="text-center"><a href='{{ ticket.issueLink|default("", true) }}' target="_blank">{{ticket.issueNumber|default("", true)}}</a>
-
-                            <button type="button" class="btn btn-info" data-toggle="modal" data-target=".updateTicketModal-lg" data-ticketid="{{ticket.ticketId}}" data-title="{{ticket.title|default('', true)}}" data-dependantSystem="{{ticket.dependantSystem|default('', true)}}" data-dependantReason="{{ticket.dependantReason|default('', true)}}"  data-issueNumber="{{ticket.issueNumber|default('', true)}}" data-devEstimateInDays="{{ticket.devEstimateInDays|default('', true)}}" data-qaEstimateInDays="{{ticket.qaEstimateInDays|default('', true)}}" data-issueStatus="{{ticket.issueStatus|default('', true)}}" data-proposedReleaseDropTo="{{ticket.proposedReleaseDropTo|default('', true)}}" data-totalComments="{{ticket.totalComments|default('', true)}}" data-notes="{{ticket.notes|default('', true)}}" data-sharedPlatformIssue="{{ticket.sharedPlatformIssue|default('', true)}}">
-                                Update
-                            </button>
-                            </th>
-                            <td>{{ticket.title|default("", true)}}</td>
-                            <td>{{ticket.dependantSystem|default("", true)}}</td>
-                            <td>{{ticket.dependantReason|default("", true)}}</td>
-                            <td>{{ticket.devEstimateInDays|default("", true)}}</td>
-                            <td>{{ticket.qaEstimateInDays|default("", true)}}</td>
-                            <td>{{ticket.issueStatus|default("", true)}}</td>
-                            <td>{{ticket.proposedReleaseDropTo|default("", true)}}</td>
-                            <td>{{ticket.totalComments|default("", true)}}</td>
-                            <td>{{ticket.notes|default("", true)}}</td>
-                            <td>{{ticket.sharedPlatformIssue|default("", true)}}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        {% endif %}
-        {% endfor %}
+        <hr>
 
         <!-- The form starts -->
         <form class="needs-validation" id="projectEpicsForm" novalidate>
@@ -207,6 +156,70 @@
                 </div>
             </div>
         </form>
+
+
+        {% if peats|length > 0 %}
+        <div class="row text-left">
+            <div class="col">
+                <hr>
+                <h3>&nbsp</h3>
+                <input type="text" autocomplete="off" class="form-control form-control-lg" id="searchInputField" name="searchInputField" placeholder="Quick search for issues from the epics below">
+                <hr>
+                <h3 class="mt-5">Epics added to this project</h3>
+            </div>
+        </div>
+        {% endif %}
+        {% for peat in peats %}
+        {% if peat.allTickets|length > 0 %}
+        <div class="row text-left">
+            <div class="col">
+                <h4 class="mt-5">{{ peat.epicName }}</h4>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Issue #</th>
+                            <th scope="col">Title</th>
+                            <th scope="col">Dependant system</th>
+                            <th scope="col">Dependant reason</th>
+                            <th scope="col">Dev est in days</th>
+                            <th scope="col">QA est in days</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Scope / Releasing to</th>
+                            <th scope="col">Total comments</th>
+                            <th scope="col">Notes</th>
+                            <th scope="col">Shared platform Issue?</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ticket in peat.allTickets %}
+                        <tr>
+                            <th scope="row" class="text-center"><a href='{{ ticket.issueLink|default("", true) }}' target="_blank">{{ticket.issueNumber|default("", true)}}</a>
+
+                            <button type="button" class="btn btn-info" data-toggle="modal" data-target=".updateTicketModal-lg" data-ticketid="{{ticket.ticketId}}" data-title="{{ticket.title|default('', true)}}" data-dependantSystem="{{ticket.dependantSystem|default('', true)}}" data-dependantReason="{{ticket.dependantReason|default('', true)}}"  data-issueNumber="{{ticket.issueNumber|default('', true)}}" data-devEstimateInDays="{{ticket.devEstimateInDays|default('', true)}}" data-qaEstimateInDays="{{ticket.qaEstimateInDays|default('', true)}}" data-issueStatus="{{ticket.issueStatus|default('', true)}}" data-proposedReleaseDropTo="{{ticket.proposedReleaseDropTo|default('', true)}}" data-totalComments="{{ticket.totalComments|default('', true)}}" data-notes="{{ticket.notes|default('', true)}}" data-sharedPlatformIssue="{{ticket.sharedPlatformIssue|default('', true)}}">
+                                Update
+                            </button>
+                            </th>
+                            <td>{{ticket.title|default("", true)}}</td>
+                            <td>{{ticket.dependantSystem|default("", true)}}</td>
+                            <td>{{ticket.dependantReason|default("", true)}}</td>
+                            <td>{{ticket.devEstimateInDays|default("", true)}}</td>
+                            <td>{{ticket.qaEstimateInDays|default("", true)}}</td>
+                            <td>{{ticket.issueStatus|default("", true)}}</td>
+                            <td>{{ticket.proposedReleaseDropTo|default("", true)}}</td>
+                            <td>{{ticket.totalComments|default("", true)}}</td>
+                            <td>{{ticket.notes|default("", true)}}</td>
+                            <td>{{ticket.sharedPlatformIssue|default("", true)}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+
+
 
 
         <!-- Modal -->

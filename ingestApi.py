@@ -22,18 +22,21 @@ def api_ingest_epics(board_name):
     repoId = boardsModel.get_repo_id(board_name)
     all_epics = epicsModel.fetch_epics(repoId)
     epic_issues = all_epics['epic_issues']
+    repoId = boardsModel.get_repo_id(board_name)
 
     epicsModel.delete_all_epics_for_board(board_name)
 
     for epic_issue in epic_issues:
         epic_issue_number = epic_issue['issue_number']
         epic_issue_details = issuesModel.fetch_issue(epic_issue_number, board_name)
-        issue_status = issuesModel.issue_status(epic_issue_details)
-        if issue_status is "epic":
-            if epic_issue_details["state"] != "closed":
+        if epic_issue_details["state"] != "closed":
+            issue_status = issuesModel.fetch_issue_status(epic_issue_number, repoId)
+            if issue_status is "epic":
                 epicsModel.insert_epics(epic_issue_number, epic_issue_details['title'], board_name)
+            else:
+                print("Issue Type is not Epic as its: %s" %(issue_status))
         else:
-            print("Issue status: %s" %(issue_status))
+            print("Issue status: %s" %(epic_issue_details["state"]))
     return "epics ingestion is complete"
 
 
