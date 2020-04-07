@@ -46,6 +46,11 @@ def get_epic_by_board_name(board_name):
     all_epics = db.with_query(query)
     return loop_all_epics(all_epics)
 
+def get_epic_by_project_id(projectId):
+    query = "select * from epics where boardName IN (SELECT p.boardName from projects p  join epics e on e.boardName=p.boardName where p.projectId = %s limit 1)" %(projectId)
+    all_epics = db.with_query(query)
+    return loop_all_epics(all_epics)
+
 def insert_epics(epic_issue_number, epic_title, board_name):
     query = "INSERT INTO epics (epicId, epicName, boardName) VALUES (?, ?, ?)"
     args = (epic_issue_number, epic_title, board_name)

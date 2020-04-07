@@ -21,7 +21,7 @@ def projectEpicsAndTickets(project_id):
         project = projectsModel.get_project_with_id(project_id)["projects"][0]
     if epicsModel.get_epics()["epics"] != []:
         # TODO: get epics that are not in the projectEpicsAndTickets table such that the dropdown does not have repeats
-        epics = epicsModel.get_epics()["epics"]
+        epics = epicsModel.get_epic_by_project_id(project_id)["epics"]
     peat = peatm.get_epics_and_issues_with_project_id(project_id)["projectEpicsIssues"]
 
     return render_template("projectEpicsAndTickets.html", project=project, epics=epics, peats=peat)
