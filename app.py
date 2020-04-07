@@ -167,7 +167,8 @@ def api_github_issue(board_name, issue_number):
     if api_issue(board_name, issue_number)["issues"] == []:
         issue_does_not_exists = issuesModel.check_issue_exists(issue_number, board_name)
         if issue_does_not_exists:
-            issue_status = issuesModel.fetch_issue_status(issue_number)
+            repoId = boardsModel.get_repo_id(board_name)
+            issue_status = issuesModel.fetch_issue_status(issue_number, repoId)
             if issue_status is not "epic":
                 issuesModel.insert_issues(issue_number, board_name, issue_details['title'], issue_status, issue_details["html_url"])
 

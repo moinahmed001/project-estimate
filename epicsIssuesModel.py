@@ -1,4 +1,5 @@
 import requests, json
+import time
 import db
 from flask import Flask
 
@@ -44,16 +45,22 @@ def loop_all_epics_issues(all_epics_issues):
         })
     return array_epics_issues
 
-def fetch_epic_issues(epicId):
+def fetch_epic_issues(epicId, repoId):
     zenhub_root_url = app.config['ZENHUB_ROOT_URL']
     epics_url = app.config['EPICS_URL']
-    epics_url = epics_url.replace("{repositories_id}", app.config['REPOSITORIES_ID'])
+    epics_url = epics_url.replace("{repositories_id}", str(repoId))
 
     headers = {'X-Authentication-Token': app.config['ZENHUB_AUTH_TOKEN']}
     url = zenhub_root_url + epics_url + "/" + str(epicId)
 
+    print("Attempting to fetch epic issues url: %s" %(url))
     r = requests.get(url, headers=headers)
+    print("Zenhub api rate used so far %s out 100" %(r.headers["X-RateLimit-Used"]))
 
+    if int(r.headers["X-RateLimit-Used"]) > 95:
+        sleep_for = (int(r.headers["X-RateLimit-Reset"]) - int(time.time())) + 1
+        print("SLEEPING FOR %s seconds" %(sleep_for))
+        time.sleep(sleep_for)
     data = r.json()
     return data
 
@@ -64,4 +71,4 @@ def insert_epics_issues(epic_id, issue_number, board_name):
 
 def delete_all_epics_issues_for_board(board_name):
     delete_epicsIssues_query = "DELETE FROM epicsIssues where boardName = '%s'" %(board_name)
-    return db.with_query(delete_epicsIssues_query)
+    return db.delete_query(delete_epicsIssues_query)

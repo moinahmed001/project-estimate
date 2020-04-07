@@ -120,7 +120,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for ticket in peat.allTickets|sort(attribute='issueStatus') %}
+                        {% for ticket in peat.allTickets %}
                         <tr>
                             <th scope="row" class="text-center"><a href='{{ ticket.issueLink|default("", true) }}' target="_blank">{{ticket.issueNumber|default("", true)}}</a>
 

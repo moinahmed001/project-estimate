@@ -14,6 +14,11 @@ def get_board(repo_id):
     board = db.with_query(query)
     return loop_all_boards(board)
 
+def get_repo_id(board_name):
+    query = "SELECT repoId from boards where boardName='%s' LIMIT 1" %(board_name)
+    board = db.with_query(query)
+    return board[0][0]
+
 def loop_all_boards(all_boards):
     array_board = {'boards':[]}
     for board in all_boards:
