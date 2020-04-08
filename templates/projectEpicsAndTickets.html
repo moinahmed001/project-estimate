@@ -16,7 +16,7 @@
                 <label for="projectManager">Project manager</label>
                 <div class="input-group">
                     <div class="input-group-prepend">
-                        <span class="input-group-text">PM</span>
+                        <span class="input-group-text"><i class="fas fa-user"></i></span>
                     </div>
                     <input type="text" disabled value='{{ project.projectManager|default("", true) }}' class="form-control" autocomplete="off" id="projectManager" name="projectManager" placeholder="Project manager">
                 </div>
@@ -25,7 +25,7 @@
                 <label for="architectName">Architect name</label>
                 <div class="input-group">
                     <div class="input-group-prepend">
-                        <span class="input-group-text">A</span>
+                        <span class="input-group-text"><i class="fas fa-sitemap"></i></span>
                     </div>
                     <input type="text" disabled value='{{ project.architectName|default("", true) }}' class="form-control" autocomplete="off" id="architectName" name="architectName" placeholder="Architect name" aria-describedby="inputGroupPrepend">
                 </div>
@@ -36,7 +36,7 @@
                 <label for="businessReqUrl">Business requirement url</label>
                 <div class="input-group">
                     <div class="input-group-prepend">
-                        <span class="input-group-text">WEB</span>
+                        <span class="input-group-text"><i class="fab fa-confluence"></i></span>
                     </div>
                     <input type="text" disabled value='{{ project.businessReqUrl|default("", true) }}' class="form-control" autocomplete="off" id="businessReqUrl" name="businessReqUrl" placeholder="Business requirement url">
                 </div>
@@ -45,7 +45,7 @@
                 <label for="productOwner">Product owner</label>
                 <div class="input-group">
                     <div class="input-group-prepend">
-                        <span class="input-group-text">PO</span>
+                        <span class="input-group-text"><i class="fas fa-user-astronaut"></i></span>
                     </div>
                     <input type="text" disabled value='{{ project.productOwner|default("", true) }}' class="form-control" autocomplete="off" id="productOwner" name="productOwner" placeholder="Product owner">
                 </div>
@@ -54,7 +54,7 @@
                 <label for="boardName">Board</label>
                 <div class="input-group">
                     <div class="input-group-prepend">
-                        <span class="input-group-text">B</span>
+                        <span class="input-group-text"><i class="fas fa-clipboard-list"></i></span>
                     </div>
                     <input type="text" disabled value='{{ project.boardName|default("", true) }}' autocomplete="off" class="form-control" id="boardName" name="boardName">
                 </div>
@@ -65,7 +65,7 @@
                 <label for="releaseDate">Prod release date</label>
                 <div class="input-group">
                     <div class="input-group-prepend">
-                        <span class="input-group-text">PM</span>
+                        <span class="input-group-text"><i class="fas fa-flag-checkered"></i></span>
                     </div>
                     <input type="text" disabled value='{{ project.releaseDate|default("", true) }}' autocomplete="off" class="form-control" id="releaseDate" name="releaseDate">
                 </div>
@@ -74,7 +74,7 @@
                 <label for="trialDate">Trial release date</label>
                 <div class="input-group">
                     <div class="input-group-prepend">
-                        <span class="input-group-text">PM</span>
+                        <span class="input-group-text"><i class="fas fa-flag"></i></span>
                     </div>
                     <input type="text" disabled value='{{ project.trialDate|default("", true) }}' autocomplete="off" class="form-control" id="trialDate" name="trialDate">
                 </div>
@@ -104,7 +104,7 @@
                     <label for="epicId">Choose an Epic to fetch its issues</label>
                     <div class="input-group">
                         <div class="input-group-prepend">
-                            <span class="input-group-text">E</span>
+                            <span class="input-group-text"><i class="fas fa-check-double"></i></span>
                         </div>
                         <select class="custom-select" id="id" name="id" required>
                             <option value="" selected>Select Epics</option>
@@ -138,7 +138,7 @@
                     <label for="id">Add any issue that is not part of an epic</label>
                     <div class="input-group">
                         <div class="input-group-prepend">
-                            <span class="input-group-text">I</span>
+                            <span class="input-group-text"><i class="fas fa-check"></i></span>
                         </div>
                         <input type="text" class="form-control" autocomplete="off" name="id" placeholder="Issue Number" required>
                         <div class="invalid-feedback">
